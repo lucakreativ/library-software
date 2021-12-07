@@ -85,23 +85,37 @@ def taking_book(ISBN, Name):
 def new_user(Benutzername, EMail, Passwort, Typ):
     
     hash=hash_password(Passwort)
-    cursor.execute("""INSERT INTO Benutzer (Benutzername, E_Mail, Passwort, Typ) VALUES (%s, %s, %s, %s)""", (Benutzername, EMail, hash[0:1], Typ))
+    cursor.execute("""INSERT INTO Benutzer (Benutzername, EMail, Passwort, Typ) VALUES (%s, %s, %s, %s)""", (Benutzername, EMail, hash, Typ))
     conn.commit()
 
 
 def hash_password(hash):
     i=0
-    while i <1000:
+    while i <314:
         i+=1
         hash=hashlib.sha512(str(hash).encode("utf-8")).hexdigest()
     
     return hash
 
 
-def login(username, password):
-    cursor.execute("SELECT * FROM Benutzer WHERE Benutzername=%s" % (username))
-    inhalt=cursor.fetchall()
-    print(inhalt)
+def login(username, password_i):
+    try:
+        cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))
+        
+        password=cursor.fetchall()
+        password=password[0][0]
+        hash=hash_password(password_i)
+        print(hash)
+        print(password)
+
+        if password==hash:
+            print("wahr")
+            return True
+        else:
+            print("falsch")
+            return False
+    except:
+        return False
 
 
 
@@ -120,5 +134,5 @@ Name="ekun"
 
 #book_by_user("", True)
 
-new_user("Burek-Test", "burek@schiller.d", "pass", "Personal")
-#login("Heribert", "test")
+#new_user("Bureks2", "burek@schiller.d", "la", "Personal")
+login("Bureks2", "la")
