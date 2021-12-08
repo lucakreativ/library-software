@@ -113,23 +113,3 @@ def login(username, password_i):
             return False
     except:
         return False
-
-
-
-
-
-
-
-ISBN="123456"
-Titel="Mon der Kuck"
-Autor="Lu"
-Name="ekun"
-#insert_book(ISBN, Titel, Autor)
-#book_return("", True)
-#taking_book(ISBN, "Kevin Günter")
-
-
-#book_by_user("", True)
-
-#new_user("Bureks2", "burek@schiller.d", "la", "Personal")
-#login("Bureks2", "la")
