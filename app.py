@@ -36,6 +36,9 @@ def home():
             return(redirect("/?site=book_by_user"))
         
         elif site=="books":
+            ISBN=request.args.get("ISBN")
+            Titel=request.args.get("Titel")
+
             data=get_data.print_all("Bücher", ["ID", "ISBN", "Name", "Autor"])
             return data
 

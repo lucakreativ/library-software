@@ -10,7 +10,7 @@ import pandas as pd
 
 
 
-inactive_time_m=0.1
+inactive_time_m=0.
 inactive_time_s=inactive_time_m*60
 start_time=[0]
     
@@ -105,14 +105,11 @@ def login(username, password_i):
         password=cursor.fetchall()
         password=password[0][0]
         hash=hash_password(password_i)
-        print(hash)
-        print(password)
+        
 
         if password==hash:
-            print("wahr")
             return True
         else:
-            print("falsch")
             return False
     except:
         return False
@@ -135,4 +132,4 @@ Name="ekun"
 #book_by_user("", True)
 
 #new_user("Bureks2", "burek@schiller.d", "la", "Personal")
-login("Bureks2", "la")
+#login("Bureks2", "la")
