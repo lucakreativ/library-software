@@ -43,6 +43,16 @@ def home():
             return data
 
 
+        elif site=="take_book":
+            ISBN=request.args.get("ISBN")
+            user=request.args.get("user")
+
+            if user!=None:
+                print("hier")
+                get_data.taking_book(ISBN, user)
+                return("True")
+            else:
+                return render_template("taking_book.html")
 
 
 
