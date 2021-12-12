@@ -1,10 +1,7 @@
 from mysql.connector import MySQLConnection, Error
 from python_mysql_dbconfig import read_db_config
 from datetime import date
-import time
-import os
 import hashlib
-import sys
 import pandas as pd
 
 
@@ -29,6 +26,19 @@ def print_all(table, table_name):
     data=pd.DataFrame(data, columns=table_name)
     
     html_table=data.to_html()
+        
+    return html_table
+
+
+def print_books():
+    cursor.execute("SELECT * FROM Bücher")
+    data=cursor.fetchall()
+
+    data=pd.DataFrame(data, columns=["ID", "ISBN", "Name", "Autor"])
+    
+    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=take_book&ISBN={0}">{0}</a>'.format(x))
+
+    html_table=data.to_html(escape=False)
         
     return html_table
     

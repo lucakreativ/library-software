@@ -7,11 +7,11 @@
     <center> <h1> Taking_Book </h1> </center>   
     <form action="/" method="get">  
         <div class="container">
+            <input type="hidden" value="take_book" name="site" required> 
             <label>ISBN : </label>   
-            <input type="text" placeholder="name" name="ISBN" required> 
+            <input type="text" placeholder="name" name="ISBN" value="{{ISBN}}"required> 
             <label>Name : </label>   
             <input type="text" placeholder="name" name="user" required>
-            <input type="text" placeholder="take_book" name="site" required>  
             <button type="submit">OK</button> 
         </div>   
     </form>     

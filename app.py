@@ -39,7 +39,7 @@ def home():
             ISBN=request.args.get("ISBN")
             Titel=request.args.get("Titel")
 
-            data=get_data.print_all("Bücher", ["ID", "ISBN", "Name", "Autor"])
+            data=get_data.print_books()
             return data
 
 
@@ -48,11 +48,10 @@ def home():
             user=request.args.get("user")
 
             if user!=None:
-                print("hier")
                 get_data.taking_book(ISBN, user)
                 return("True")
             else:
-                return render_template("taking_book.html")
+                return render_template("taking_book.html", ISBN=ISBN)
 
 
 
