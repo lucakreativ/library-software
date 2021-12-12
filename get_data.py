@@ -43,7 +43,7 @@ def print_books():
     return html_table
     
 
-def taking_print(id):
+def keep_taking_print(id):
     cursor.execute("SELECT Verlängert FROM Ausleihen WHERE ID=%d" % (int(id)))
     inhalt=cursor.fetchall()
     print(inhalt)
