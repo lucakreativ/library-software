@@ -53,12 +53,22 @@ def home():
             else:
                 return render_template("taking_book.html", ISBN=ISBN)
 
+        elif site=="insert_book":
+            autor=request.args.get("autor")
+            ISBN=request.args.get("ISBN")
+            titel=request.args.get("titel")
+
+            if autor!=None and ISBN!=None and titel!=None:
+                get_data.insert_book(ISBN, titel, autor)
+            else:
+                return render_template("insert_book.html")
 
 
 
 
 
-
+        else:
+            return("Seite nicht gefunden")
 
 
 
