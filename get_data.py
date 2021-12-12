@@ -43,12 +43,22 @@ def print_books():
     return html_table
     
 
-#Bücher werden hinzugefügt
-def insert_book(ISBN, Titel, Autor):
-    cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))
+def taking_print(id):
+    cursor.execute("SELECT Verlängert FROM Ausleihen WHERE ID=%d" % (int(id)))
+    inhalt=cursor.fetchall()
+    print(inhalt)
+    data=inhalt[0][0]
+    return data
+
+
+def keep_taking(id):
+    cursor.execute("UPDATE Ausleihen SET Verlängert=1 WHERE ID=%d" % (int(id)))
     conn.commit()
 
 
+def insert_book(ISBN, Titel, Autor):
+    cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))
+    conn.commit()
 
 
 def book_by_user(Name, all):
@@ -63,7 +73,6 @@ def book_by_user(Name, all):
                 inhalt=cursor.fetchall()
                 data.append(inhalt)
             
-
     else:
         cursor.execute("SELECT * FROM Ausleihen")
         data=cursor.fetchall()
@@ -75,7 +84,6 @@ def book_by_user(Name, all):
     html_table=data.to_html()
         
     return html_table
-
 
 
 def book_return(ID):
@@ -91,7 +99,6 @@ def taking_book(ISBN, Name):
 
     
 
-#Datenbank nimmt nur Varchar an, wird als Bytes aber gesendet
 def new_user(Benutzername, EMail, Passwort, Typ):
     
     hash=hash_password(Passwort)
