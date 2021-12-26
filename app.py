@@ -26,6 +26,7 @@ def home():
             if name==None:
                 all=True
             return (str(get_data.book_by_user(name, all)))
+
         elif site=="return_book":
             ID=request.args.get("ID")
             if ID==None:
@@ -63,6 +64,13 @@ def home():
             else:
                 return render_template("insert_book.html")
 
+        elif site=="keep_book":
+            id=request.args.get("id")
+
+            if id!=None:
+                get_data.keep_taking(id)
+            else:
+                return (redirect("/?site=get_data.book_by_user"))
 
 
 

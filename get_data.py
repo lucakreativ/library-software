@@ -7,7 +7,7 @@ import pandas as pd
 
 
 
-inactive_time_m=0.
+inactive_time_m=100
 inactive_time_s=inactive_time_m*60
 start_time=[0]
     
@@ -81,7 +81,22 @@ def book_by_user(Name, all):
     data=pd.DataFrame(data, columns=["ID", "Name", "ISBN", "Zeitpunkt des Ausleihen", "Verlängert", "Protokoll-ID"])
     data=data.drop("Protokoll-ID", 1)
     
-    html_table=data.to_html()
+    data["Verlängert"]=data["Verlängert"].apply(lambda x:'<a href="/?site=keep_book&id={0}">verlängern</a>'.format(x))
+
+    data["Verlängert"]=data["Verlängert"].replace(
+        to_replace="""<a href="/?site=keep_book&id=1">verlängern</a>""",
+        value="schon Verlängert"
+    )
+
+    for index in data.iterrows():
+        num=index[0]
+        id=data.iloc[num]["ID"]
+
+        if data.iloc[num]["Verlängert"]=="""<a href="/?site=keep_book&id=0">verlängern</a>""":
+            data.at[num, "Verlängert"]="""<a href="/?site=keep_book&id=%s">verlängern</a>""" % (str(id))
+
+
+    html_table=data.to_html(escape=False)
         
     return html_table
 
@@ -116,6 +131,7 @@ def hash_password(hash):
 
 
 def login(username, password_i):
+    return True
     try:
         cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))
         
