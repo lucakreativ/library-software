@@ -107,9 +107,10 @@ def book_return(ID):
     conn.commit()
 
 
-def taking_book(ISBN, Name):
+def taking_book(ISBN, Name, user):
+    id=protocol_write.write_in_protocol_table(2, Name, user, ISBN)
     today=date.today()
-    cursor.execute("INSERT INTO Ausleihen (Schülername, ISBN, Datum, Verlängert, ProtokollID) VALUES (%s, %s, %s, %s, %s)", (Name, int(ISBN), today, 0, 0))
+    cursor.execute("INSERT INTO Ausleihen (Schülername, ISBN, Datum, Verlängert, ProtokollID) VALUES (%s, %s, %s, %s, %s)", (Name, int(ISBN), today, 0, id))
     conn.commit()
 
 
@@ -146,3 +147,5 @@ def login(username, password_i):
             return False
     except:
         return False
+
+new_user("lucakreativ", "@gmail.com", "lucakjell", "Personal")

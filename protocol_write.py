@@ -33,6 +33,8 @@ def write_in_protocol_table(type, name, user, param):
         now = datetime.now()
         text="%s leiht %s von %s" % (name, param, now)
 
-    print(text)
+
     cursor.execute("""INSERT INTO Protokoll (ProtokollID, Art, Text, gebucht, Datum) VALUES (%s, %s, %s, %s, %s)""", (id, int(type), str(text), str(user), now))
     conn.commit()
+
+    return id

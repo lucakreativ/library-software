@@ -47,12 +47,16 @@ def home():
         elif site=="take_book":
             ISBN=request.args.get("ISBN")
             user=request.args.get("user")
+            username=session["user"]
 
             if user!=None:
-                get_data.taking_book(ISBN, user)
+                get_data.taking_book(ISBN, user, username)
                 return("True")
             else:
-                return render_template("taking_book.html", ISBN=ISBN)
+                if ISBN!=None:
+                    return render_template("taking_book.html", ISBN=ISBN)
+                else:
+                    return render_template("taking_book.html", ISBN="")
 
         elif site=="insert_book":
             autor=request.args.get("autor")
@@ -96,10 +100,11 @@ def validate():
     check_login()
     username=request.form.get("username")
     password=request.form.get("password")
-    if get_data.login(username, password):
+    if get_data.login(username, password)==True:
 
         session["login"]=2
         session["login_time"]=time.time()
+        session["user"]=username
 
         return redirect("/")
     else:
