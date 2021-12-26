@@ -1,4 +1,5 @@
 from mysql.connector import MySQLConnection, Error
+import protocol_write
 from python_mysql_dbconfig import read_db_config
 from datetime import date
 import hashlib
@@ -115,7 +116,6 @@ def taking_book(ISBN, Name):
     
 
 def new_user(Benutzername, EMail, Passwort, Typ):
-    
     hash=hash_password(Passwort)
     cursor.execute("""INSERT INTO Benutzer (Benutzername, EMail, Passwort, Typ) VALUES (%s, %s, %s, %s)""", (Benutzername, EMail, hash, Typ))
     conn.commit()
@@ -126,7 +126,6 @@ def hash_password(hash):
     while i <314:
         i+=1
         hash=hashlib.sha512(str(hash).encode("utf-8")).hexdigest()
-    
     return hash
 
 
@@ -139,7 +138,9 @@ def login(username, password_i):
         hash=hash_password(password_i)
         
 
-        if password==hash:
+        if str(password)==str(hash):
+            protocol_write.write_in_ip_table(username)
+
             return True
         else:
             return False
