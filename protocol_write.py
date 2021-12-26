@@ -22,3 +22,17 @@ def write_in_ip_table(user):
 
     cursor.execute("""INSERT INTO LoginIP (Benutzername, IP, Datum, Anfangsuhrzeit, Enduhrzeit) VALUES (%s, %s, %s, %s, %s)""", (user, IP, today, current_time, end))
     conn.commit()
+
+def write_in_protocol_table(type, name, user, param):
+    cursor.execute("""SELECT MAX(ProtokollID) FROM Protokoll""")
+    id=int(cursor.fetchall()[0][0])
+    id+=1
+
+    type=int(type)
+    if type==2:
+        now = datetime.now()
+        text="%s leiht %s von %s" % (name, param, now)
+
+    print(text)
+    cursor.execute("""INSERT INTO Protokoll (ProtokollID, Art, Text, gebucht, Datum) VALUES (%s, %s, %s, %s, %s)""", (id, int(type), str(text), str(user), now))
+    conn.commit()
