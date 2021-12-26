@@ -131,7 +131,6 @@ def hash_password(hash):
 
 
 def login(username, password_i):
-    return True
     try:
         cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))
         
