@@ -18,7 +18,17 @@ def home():
     else:
         site=request.args.get("site")
         if site==None:
-            return ("Main Site")
+
+            all=False
+
+            name=request.args.get("name")
+            if name==None:
+                all=True
+            table=get_data.book_by_user(name, all)
+            return render_template("main.html", tables=table.to_html(escape=False),
+            titles = "Ausgeliehen")
+
+
         elif site=="book_by_user":
             all=False
 

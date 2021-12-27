@@ -1,0 +1,17 @@
+footer {
+    height: 65px;
+    padding-top: 10px;
+    background-color: #c0bcbc;
+    float: bottom;
+}
+
+#ge ul li {
+    width: 50%;
+    float: left;
+    padding-bottom: 15px;
+    padding-bottom: 0;
+}
+
+#da {
+    padding-bottom: 0;
+}

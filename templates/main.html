@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>DreamHosting.at</title>
+
+        <link rel="stylesheet" href="/static/home.css" type="text/css">
+        <link rel="stylesheet" href="/static/footer.css" type="text/css">
+        <link rel="stylesheet" href="/static/header.css" type="text/css">
+
+        <meta charset="utf-8">
+    </head>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="?site=logout">Abmelden</a></li>
+                <li><a href="">Protokoll</a></li>
+                <li><a href="?site=books">Buchverwaltung</a></li>
+                <li><a href="?site=take_book">Buch ausleihen</a></li>
+                <li><a href="/">Übersicht</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <body>
+        <div id="main">
+
+            {% for table in tables %}
+            <h2>{{titles[loop.index]}}</h2>
+            {{ table|safe }}
+                {% endfor %}
+
+        </div>
+
+    </body>
+
+    <footer>
+        <div id="ge">
+                <ul>
+                        <li>
+                                <div id="copy">
+                                        &copy; lucakreativ, 2021
+                                </div>
+                        </li>
+                </ul>
+        <div>
+    </footer>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

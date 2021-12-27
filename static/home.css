@@ -1,0 +1,158 @@
+@font-face {
+    font-family: "Breakout";
+    src:url(../font/Breakout.otf) format("opentype");
+}
+
+html {
+    text-align: center;
+}
+
+body {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+#willkommen {
+    background-color: #222121;
+    height: 400px;
+    background-image: url("../img/3.jpg");
+    background-size: cover;
+    color: #00BFFF;
+}
+
+#willkommen h1{
+    padding-top: 60px;
+    color: #00BFFF;
+    margin-top: 0;
+    font-size: 66px;
+}
+
+#ip {
+    color: #30f000;
+    font-family: "Breakout";
+}
+
+
+
+#about {
+    background-color: #c5c5c5;
+    color: #242222;
+    height: 400px;
+}
+
+#about h1 {
+    margin-top: 0;
+    padding-top: 40px;
+}
+
+#about p {
+    font-size: 20px;
+}
+
+
+
+#merk {
+    background-color: #222121;
+    height: 400px;
+    color: #ffffff;
+    background-image: url("../img/4.jpg");
+    background-size: cover;
+}
+
+#mer ul li {
+    width: 33.3%;
+    float: left;
+    margin-bottom: 15px;
+    height: 250px;
+}
+
+#merk h1 {
+    margin-top: 0;
+    padding-top: 40px;
+}
+
+#merk p {
+    width: 80%;
+    margin-left: 10%;
+    font-size: 20px;
+}
+
+
+
+#kontakt {
+    background-color: #c5c5c5;
+    height: 170px;
+    color: #ffffff;
+}
+
+#kontakt h1 {
+    margin-top: 0;
+    color: #222121;
+    padding-top: 20px;
+}
+
+#kontakt h2 {
+    color: #2b2a2a;
+    font-size: 17px;
+}
+
+
+
+
+#dar {
+    height: auto;
+    background-image: url("../img/3.jpg");
+    background-attachment: fixed; 
+    padding-left: 23%;
+    padding-top: 10%;
+    background-size: cover;
+}
+
+#dar p {
+    padding-top: 10;
+    color: #ffffff;
+}
+
+#dari {
+    height: 100%;
+    background-image: url("../img/3.jpg");
+    background-attachment: fixed; 
+    padding-left: 23%;
+    padding-top: 10%;
+    background-size: cover;
+}
+
+#dbox {
+    float: middle;
+    width: 70%;
+    height: auto;
+    border: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 400px;
+    background: grey;
+    background-clip: padding-box;
+    padding-top: 7px;
+}
+
+#dibox {
+    float: middle;
+    width: 70%;
+    height: 50px;
+    border: 10px;
+    margin-bottom: 300px;
+    background: grey;
+    background-clip: padding-box;
+    padding-top: 7px;
+}

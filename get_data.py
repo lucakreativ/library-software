@@ -96,8 +96,8 @@ def book_by_user(Name, all):
         if data.iloc[num]["Verlängert"]=="""<a href="/?site=keep_book&id=0">verlängern</a>""":
             data.at[num, "Verlängert"]="""<a href="/?site=keep_book&id=%s">verlängern</a>""" % (str(id))
 
-
-    html_table=data.to_html(escape=False)
+    html_table=data
+    #html_table=data.to_html(escape=False)
         
     return html_table
 
