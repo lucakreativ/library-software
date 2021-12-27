@@ -73,6 +73,7 @@ def home():
 
             if id!=None:
                 get_data.keep_taking(id)
+                return "True"
             else:
                 return (redirect("/?site=get_data.book_by_user"))
 
