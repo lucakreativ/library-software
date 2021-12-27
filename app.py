@@ -25,8 +25,8 @@ def home():
             if name==None:
                 all=True
             table=get_data.book_by_user(name, all)
-            return render_template("main.html", tables=table.to_html(escape=False),
-            titles = "Ausgeliehen")
+            return render_template("main.html", tables=[table.to_html(escape=False)],
+            titles = ['na', 'Ausgeliehen'])
 
 
         elif site=="book_by_user":

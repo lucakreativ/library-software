@@ -97,7 +97,6 @@ def book_by_user(Name, all):
             data.at[num, "Verlängert"]="""<a href="/?site=keep_book&id=%s">verlängern</a>""" % (str(id))
 
     html_table=data
-    #html_table=data.to_html(escape=False)
         
     return html_table
 
