@@ -80,7 +80,7 @@ def book_by_user(Name, all):
 
 
     data=pd.DataFrame(data, columns=["ID", "Name", "ISBN", "Zeitpunkt des Ausleihen", "Verlängert", "Protokoll-ID"])
-    data=data.drop("Protokoll-ID", 1)
+    data.drop(data.columns[[5]], axis=1, inplace=True)
     
     data["Verlängert"]=data["Verlängert"].apply(lambda x:'<a href="/?site=keep_book&id={0}">verlängern</a>'.format(x))
 
@@ -147,5 +147,3 @@ def login(username, password_i):
             return False
     except:
         return False
-
-new_user("lucakreativ", "@gmail.com", "lucakjell", "Personal")
