@@ -24,7 +24,7 @@ def write_in_ip_table(user):
     conn.commit()
 
 def write_in_protocol_table(type, name, user, param):
-    cursor.execute("""SELECT MAX(ProtokollID) FROM Protokoll""")
+    cursor.execute("""SELECT max(ProtokollID) FROM Protokoll""")
     id=int(cursor.fetchall()[0][0])
     id+=1
 
