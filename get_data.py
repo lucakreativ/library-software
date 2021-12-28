@@ -87,10 +87,8 @@ def book_by_user(Name, all):
     
 
 
-    data["Verlängert"]=data["Verlängert"].apply(lambda x:'<a href="/?site=keep_book&id={0}">verlängern</a>'.format(x))
-
     data["Verlängert"]=data["Verlängert"].replace(
-        to_replace="""<a href="/?site=keep_book&id=1">verlängern</a>""",
+        to_replace=1,
         value="schon Verlängert"
     )
 
@@ -98,8 +96,8 @@ def book_by_user(Name, all):
         num=index[0]
         id=data.iloc[num]["ID"]
 
-        if data.iloc[num]["Verlängert"]=="""<a href="/?site=keep_book&id=0">verlängern</a>""":
-            data.at[num, "Verlängert"]="""<a href="/?site=keep_book&id=%s">verlängern</a>""" % (str(id))
+        if data.iloc[num]["Verlängert"]==0:
+            data.at[num, "Verlängert"]="""<form action="" method="get"><input type="hidden" name="site" value="keep_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="verlängern"></form>""" % (str(id))
 
 
     for index in data.iterrows():
@@ -127,7 +125,7 @@ def book_by_user(Name, all):
         num=index[0]
         id=data.iloc[num]["ID"]
 
-        data.at[num, "zurückgeben"]="""<form action="" method="get"><input type="hidden" name="site" value="return_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="submit"></form>""" % (id)
+        data.at[num, "zurückgeben"]="""<form action="" method="get"><input type="hidden" name="site" value="return_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="zurückgeben"></form>""" % (id)
 
 
     data=data.sort_values(by="ausleih")
