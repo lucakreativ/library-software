@@ -79,16 +79,18 @@ def home():
                 return render_template("insert_book.html")
 
         elif site=="keep_book":
-            id=request.args.get("id")
+            id=request.args.get("ID")
 
             if id!=None:
                 get_data.keep_taking(id)
-                return "True"
+                return (redirect("/"))
             else:
-                return (redirect("/?site=get_data.book_by_user"))
+                return (redirect("/"))
 
 
-
+        elif site=="logout":
+            session.clear()
+            return(redirect("/login"))
 
         else:
             return("Seite nicht gefunden")
