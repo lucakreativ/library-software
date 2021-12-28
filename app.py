@@ -129,11 +129,9 @@ def check_login():
         if check_inactivity()==True:
             return True
         else:
-            #print("Falsch, Zeit zu lang")
             return False
 
     else:
-        #print("Falsch, keine Session vorhanden")
         return False
 
 def check_inactivity():
