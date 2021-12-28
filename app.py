@@ -44,7 +44,7 @@ def home():
 
             get_data.book_return(ID)
 
-            return(redirect("/?site=book_by_user"))
+            return(redirect("/"))
         
         elif site=="books":
             ISBN=request.args.get("ISBN")

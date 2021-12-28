@@ -2,6 +2,8 @@ from mysql.connector import MySQLConnection, Error
 import protocol_write
 from python_mysql_dbconfig import read_db_config
 from datetime import date
+from datetime import datetime
+from datetime import timedelta
 import hashlib
 import pandas as pd
 
@@ -11,6 +13,7 @@ import pandas as pd
 inactive_time_m=100
 inactive_time_s=inactive_time_m*60
 start_time=[0]
+time_to_have=7*4 #4 Weeks
     
 dbconfig = read_db_config()
 conn = MySQLConnection(**dbconfig)
@@ -75,13 +78,15 @@ def book_by_user(Name, all):
                 data.append(inhalt)
             
     else:
-        cursor.execute("SELECT * FROM Ausleihen")
+        cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")
         data=cursor.fetchall()
 
 
-    data=pd.DataFrame(data, columns=["ID", "Name", "ISBN", "Zeitpunkt des Ausleihen", "Verlängert", "Protokoll-ID"])
+    data=pd.DataFrame(data, columns=["ID", "Name", "ausleih", "Titel", "Verlängert", "Protokoll-ID"])
     data.drop(data.columns[[5]], axis=1, inplace=True)
     
+
+
     data["Verlängert"]=data["Verlängert"].apply(lambda x:'<a href="/?site=keep_book&id={0}">verlängern</a>'.format(x))
 
     data["Verlängert"]=data["Verlängert"].replace(
@@ -96,7 +101,41 @@ def book_by_user(Name, all):
         if data.iloc[num]["Verlängert"]=="""<a href="/?site=keep_book&id=0">verlängern</a>""":
             data.at[num, "Verlängert"]="""<a href="/?site=keep_book&id=%s">verlängern</a>""" % (str(id))
 
-    html_table=data
+
+    for index in data.iterrows():
+        num=index[0]
+        take_time=data.iloc[num]["ausleih"]
+        ver=data.iloc[num]["Verlängert"]
+        start = datetime.strptime(str(take_time), "%Y-%m-%d")
+        enddate=start
+        enddate=start+timedelta(days=time_to_have)
+
+        if ver=="schon Verlängert":
+            enddate=enddate+timedelta(days=time_to_have)
+
+        if enddate<datetime.now():
+            cell="""<div id='to_late'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))
+        else:
+            cell="""<div id='in_time'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))
+
+        data.at[num, "ausleih"]=cell
+
+
+    data["zurückgeben"]=""
+
+    for index in data.iterrows():
+        num=index[0]
+        id=data.iloc[num]["ID"]
+
+        data.at[num, "zurückgeben"]="""<form action="" method="get"><input type="hidden" name="site" value="return_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="submit"></form>""" % (id)
+
+
+    data=data.sort_values(by="ausleih")
+    data=data.rename(columns={"ausleih":"Abgabe-Datum"})
+    data=data.reset_index(drop=True)
+
+
+    html_table=data.drop_duplicates(subset=["ID"], keep="first")
         
     return html_table
 
