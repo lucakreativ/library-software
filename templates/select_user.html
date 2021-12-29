@@ -11,10 +11,18 @@
     <header>
         <nav>
             <ul>
-                <li><a href="?site=logout">Abmelden</a></li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Dropdown</button>
+                        <div class="dropdown-content">
+                          <a href="/?site=settings">Einstellungen</a>
+                          <a href="/?site=logout">Abmelden</a>
+                        </div>
+                    </div>
+                </li> 
                 <li><a href="">Protokoll</a></li>
-                <li><a href="?site=books">Buchverwaltung</a></li>
-                <li><a href="?site=take_book">Buch ausleihen</a></li>
+                <li><a href="/?site=books">Buchverwaltung</a></li>
+                <li><a href="/?site=take_book">Buch ausleihen</a></li>
                 <li><a href="/">Übersicht</a></li>
             </ul>
         </nav>
