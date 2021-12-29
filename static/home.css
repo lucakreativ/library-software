@@ -1,8 +1,3 @@
-@font-face {
-    font-family: "Breakout";
-    src:url(../font/Breakout.otf) format("opentype");
-}
-
 html {
     text-align: center;
 }
