@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Büchersoftware</title>
+
+        <link rel="stylesheet" href="/static/home.css" type="text/css">
+        <link rel="stylesheet" href="/static/footer.css" type="text/css">
+        <link rel="stylesheet" href="/static/header.css" type="text/css">
+
+        <meta charset="utf-8">
+    </head>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="?site=logout">Abmelden</a></li>
+                <li><a href="">Protokoll</a></li>
+                <li><a href="?site=books">Buchverwaltung</a></li>
+                <li><a href="?site=take_book">Buch ausleihen</a></li>
+                <li><a href="/">Übersicht</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <body>
+        <div id="main">
+
+            {% for table in tables %}
+            <h2>{{titles[loop.index]}}</h2>
+            {{ table|safe }}
+                {% endfor %}
+
+            <br>
+            <p>Falls der gesuchte Nutzer nicht auftaucht, können Sie auch auf den Knopf unten drücken und den Namen manuell eingeben.</p>
+            <form action="" method="get">
+                <input type="hidden" name="site" value="take_book">
+                <input type="hidden" name="para" value="0">
+                <input type="hidden" name="ISBN" value="{{ISBN}}">
+                <input type="submit" value="AUSFÜLLEN">
+            </form>
+
+        </div>
+
+    </body>
+
+    <footer>
+        <div id="ge">
+            <p>&copy; lucakreativ, 2021</p>
+        <div>
+    </footer>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

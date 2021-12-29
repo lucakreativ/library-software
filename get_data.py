@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 import hashlib
 import pandas as pd
-
+import get_name_microsoft
 
 
 
@@ -63,6 +63,28 @@ def keep_taking(id):
 def insert_book(ISBN, Titel, Autor):
     cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))
     conn.commit()
+
+
+def get_microsoft_names(ISBN, surname):
+    names=get_name_microsoft.get_names_micro(surname)
+
+
+
+    data=pd.DataFrame(names)
+    data=data.rename(columns={0:"Namen"})
+
+    for index in data.iterrows():
+        num=index[0]
+        name=data.iloc[num]["Namen"]
+
+        data.at[num, "auswählen"]="""<form action="" method="get"><input type="hidden" name="site" value="take_book"><input type="hidden" name="para" value="1"><input type="hidden" name="ISBN" value="%s"><input type="hidden" name="user" value="%s"><input type="submit" value="auswäheln"></form>""" % (ISBN, name)
+
+
+    if len(names)>0:
+        return(data, True)
+        
+    else:
+        return(data, False)
 
 
 def book_by_user(Name, all):
@@ -183,3 +205,5 @@ def login(username, password_i):
             return False
     except:
         return False
+
+get_microsoft_names("34645234", "Kevin")

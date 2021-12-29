@@ -57,11 +57,25 @@ def home():
         elif site=="take_book":
             ISBN=request.args.get("ISBN")
             user=request.args.get("user")
+            para=request.args.get("para")
             username=session["user"]
 
-            if user!=None:
+            if user!=None and para=="1":
                 get_data.taking_book(ISBN, user, username)
                 return("True")
+
+            elif para=="0":
+                return render_template("select_user_manuel.html", ISBN=ISBN, text="Geben sie bitte den Namen Manuell ein")
+
+            elif user!=None:
+                names, bo = get_data.get_microsoft_names(ISBN, user)
+
+                if bo==True:
+                    return render_template("select_user.html", ISBN=ISBN, tables=[names.to_html(escape=False)], titles = ['na', 'Namen'])
+                else:
+                    return render_template("select_user_manuel.html", ISBN=ISBN, text="Leider konnten wir keinen mit dem Namen finden, bitte geben sie den Namen manuell ein.")
+                
+
             else:
                 if ISBN!=None:
                     return render_template("taking_book.html", ISBN=ISBN)
