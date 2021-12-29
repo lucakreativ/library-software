@@ -1,3 +1,4 @@
+from logging import NOTSET
 from flask import Flask, render_template, request, redirect, session
 import time
 import get_data
@@ -47,11 +48,17 @@ def home():
             return(redirect("/"))
         
         elif site=="books":
-            ISBN=request.args.get("ISBN")
-            Titel=request.args.get("Titel")
+            search=request.args.get("search")
 
-            data=get_data.print_books()
-            return data
+            if search==None:
+                data=get_data.print_books()
+                return render_template("book.html", search="",
+                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])
+                
+            else:
+                data=get_data.search_book(search)
+                return render_template("book.html", search=search,
+                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])
 
 
         elif site=="take_book":

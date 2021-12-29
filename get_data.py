@@ -35,17 +35,28 @@ def print_all(table, table_name):
 
 
 def print_books():
-    cursor.execute("SELECT * FROM Bücher")
+    cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher")
     data=cursor.fetchall()
 
-    data=pd.DataFrame(data, columns=["ID", "ISBN", "Name", "Autor"])
+    data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])
     
     data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=take_book&ISBN={0}">{0}</a>'.format(x))
 
-    html_table=data.to_html(escape=False)
+    return data
+
+
+def search_book(search_term):
+    cursor.execute("SELECT * ISBN, Titel, Autor Bücher WHERE Titel LIKE '%"+search_term+"%' OR ISBN LIKE '%"+search_term+"%'")    
+
+
+    data=cursor.fetchall()
+
+    data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])
+
+    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=take_book&ISBN={0}">{0}</a>'.format(x))
         
-    return html_table
-    
+    return data
+
 
 def keep_taking_print(id):
     cursor.execute("SELECT Verlängert FROM Ausleihen WHERE ID=%d" % (int(id)))
