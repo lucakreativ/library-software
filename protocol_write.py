@@ -1,4 +1,3 @@
-from logging import currentframe
 from mysql.connector import MySQLConnection, Error
 from python_mysql_dbconfig import read_db_config
 from datetime import date, datetime, time
