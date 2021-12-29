@@ -1,0 +1,6 @@
+{
+  "authority": "https://login.microsoftonline.com/tenant-id",
+  "client_id": "client-id",
+  "scope": [ "https://graph.microsoft.com/.default" ],
+  "secret": "secret-key"
+}
