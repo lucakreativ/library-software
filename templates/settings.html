@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Büchersoftware</title>
+
+        <link rel="stylesheet" href="/static/home.css" type="text/css">
+        <link rel="stylesheet" href="/static/footer.css" type="text/css">
+        <link rel="stylesheet" href="/static/header.css" type="text/css">
+
+        <meta charset="utf-8">
+    </head>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Dropdown</button>
+                        <div class="dropdown-content">
+                          <a href="/?site=settings">Einstellungen</a>
+                          <a href="/?site=logout">Abmelden</a>
+                        </div>
+                    </div>
+                </li> 
+                <li><a href="">Protokoll</a></li>
+                <li><a href="/?site=books">Buchverwaltung</a></li>
+                <li><a href="/?site=take_book">Buch ausleihen</a></li>
+                <li><a href="/">Übersicht</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <body>
+        <div id="main">
+
+            <h1>Einstellungen</h1>
+            <form action="/save_setting" method="post">
+                <input type="hidden" name="order" value="change_pass">
+                <input type="password" name="old_pass" placeholder="Altes Passwort" required>
+                <input type="password" name="new1_pass" placeholder="Neues Passwort" required>
+                <input type="password" name="new2_pass" placeholder="Wiederholen" required>
+                <input type="submit" value="ändern">
+            </form>
+
+        </div>
+
+    </body>
+
+    <footer>
+        <div id="ge">
+            <p>&copy; lucakreativ, 2021</p>
+        <div>
+    </footer>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

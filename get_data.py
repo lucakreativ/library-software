@@ -199,6 +199,23 @@ def hash_password(hash):
     return hash
 
 
+def change_password(username, old_pass, new1_pass, new2_pass):
+    cursor.execute("""SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'""" % (username))
+    database_pass=cursor.fetchall()[0][0]
+    
+    old_hash=hash_password(old_pass)
+    if old_hash==database_pass:
+        if new1_pass==new2_pass:
+            new_pass_hash=hash_password(new1_pass)
+            cursor.execute("""UPDATE Benutzer SET Passwort = '%s' WHERE Benutzername = '%s'""" % (new_pass_hash, username))
+        
+            return 0 #success
+        else:
+            return 2 #not same password
+    else:
+        return 1 #incorrect password
+
+
 def login(username, password_i):
     try:
         cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))

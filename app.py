@@ -108,6 +108,12 @@ def home():
             else:
                 return (redirect("/"))
 
+        elif site=="settings":
+            return render_template("settings.html")
+
+
+
+
 
         elif site=="logout":
             session.clear()
@@ -119,6 +125,17 @@ def home():
 
 
 
+@app.route("/save_setting", methods=["POST"])
+def save_settting():
+    username=session["user"]
+    old_pass=request.form.get("order")
+    old_pass=request.form.get("old_pass")
+    new1_pass=request.form.get("new1_pass")
+    new2_pass=request.form.get("new2_pass")
+
+    re=get_data.change_password(username, old_pass, new1_pass, new2_pass)
+
+    return str(re)
 
 
 @app.route('/login')
