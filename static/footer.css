@@ -2,7 +2,11 @@ footer {
     height: 65px;
     padding-top: 10px;
     background-color: #c0bcbc;
+    bottom: 0;
+    width: 100%;
+    overflow:hidden;
     float: bottom;
+    position: absolute;
 }
 
 #ge ul li {
