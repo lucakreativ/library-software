@@ -7,6 +7,7 @@ from datetime import timedelta
 import hashlib
 import pandas as pd
 import get_name_microsoft
+import time
 
 
 
@@ -127,7 +128,7 @@ def book_by_user(Name, all):
     data=pd.DataFrame(data, columns=["ID", "Name", "ausleih", "Titel", "Verlängert", "Protokoll-ID"])
     data.drop(data.columns[[5]], axis=1, inplace=True)
     
-
+    data["unix"]=""
 
     data["Verlängert"]=data["Verlängert"].replace(
         to_replace=1,
@@ -160,6 +161,9 @@ def book_by_user(Name, all):
 
         data.at[num, "ausleih"]=cell
 
+        unix=time.mktime(enddate.timetuple())
+        data.at[num, "unix"]=unix
+
 
     data["zurückgeben"]=""
 
@@ -170,14 +174,14 @@ def book_by_user(Name, all):
         data.at[num, "zurückgeben"]="""<form action="" method="get"><input type="hidden" name="site" value="return_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="zurückgeben"></form>""" % (id)
 
 
-    data=data.sort_values(by="ausleih")
+    data=data.sort_values(by="unix")
     data=data.rename(columns={"ausleih":"Abgabe-Datum"})
     data=data.reset_index(drop=True)
 
-
-    html_table=data.drop_duplicates(subset=["ID"], keep="first")
+    data=data.drop_duplicates(subset=["ID"], keep="first")
+    data.drop(columns=["unix", "ID"], inplace=True)
         
-    return html_table
+    return data
 
 
 def book_return(ID):
