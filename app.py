@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key="sshh"
 
 
-max_time_in_m=100
+max_time_in_m=10
 max_time_in_s=max_time_in_m*60
 
 
@@ -22,6 +22,7 @@ def home():
             all=False
             name=request.args.get("user")
             if name==None:
+                name=""
                 all=True
             table=get_data.book_by_user(name, all)
             return render_template("main.html", name=name,
@@ -129,7 +130,9 @@ def home():
             else:
                 return render_template("settings.html")
 
-
+        elif site=="protocol":
+            table=get_data.return_protokoll()
+            return table
 
 
 

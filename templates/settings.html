@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </li> 
-                <li><a href="">Protokoll</a></li>
+                <li><a href="/?site=protocol">Protokoll</a></li>
                 <li><a href="/?site=books">Buchverwaltung</a></li>
                 <li><a href="/?site=take_book">Buch ausleihen</a></li>
                 <li><a href="/">Übersicht</a></li>
@@ -35,7 +35,8 @@
         <div id="main">
 
             <h1>Einstellungen</h1>
-            {{Message}}
+            <h2>Passwort ändern</h2>
+            <p>{{Message}}</p>
             <form action="/save_setting" method="post">
                 <input type="hidden" name="order" value="change_pass">
                 <input type="password" name="old_pass" placeholder="Altes Passwort" required>

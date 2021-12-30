@@ -44,8 +44,46 @@ th {
     color: green;
 }
 
+#wrong {
+    color: red;
+}
+
+#ok {
+    color: green;
+}
+
 
 #main {
     height: auto;
     margin-bottom: 100px;
+}
+
+#left {
+    width: 500px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#back_set {
+    width: 270px;
+}
+
+
+#take_book {
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    text-align: left;
+    font-size: 18px;
+}
+
+#take_in {
+    float: right;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#take_in_b {
+    width: 100%;
+    height: 40px;
 }

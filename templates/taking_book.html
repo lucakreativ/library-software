@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </li> 
-                <li><a href="">Protokoll</a></li>
+                <li><a href="/?site=protocol">Protokoll</a></li>
                 <li><a href="/?site=books">Buchverwaltung</a></li>
                 <li><a href="/?site=take_book">Buch ausleihen</a></li>
                 <li><a href="/">Übersicht</a></li>
@@ -34,15 +34,15 @@
     <body>
         <div id="main">
 
-            <center> <h1> Taking_Book </h1> </center>   
+            <center> <h1> Buch ausleihen </h1> </center>   
             <form action="/" method="get">  
-                <div class="container">
+                <div id="take_book">
                     <input type="hidden" value="take_book" name="site" required> 
-                    <label>ISBN : </label>   
-                    <input type="text" placeholder="ISBN" name="ISBN" value="{{ISBN}}"required> 
-                    <label>Name : </label>   
-                    <input type="text" placeholder="name" name="user" required>
-                    <button type="submit">OK</button> 
+                    <label>ISBN: </label>   
+                    <input type="text" placeholder="ISBN" name="ISBN" value="{{ISBN}}" id="take_in" required> <br>
+                    <label>Nachname: </label>   
+                    <input type="text" placeholder="Nachname" name="user" id="take_in" required><br>
+                    <input type="submit" id="take_in_b" value="Suchen">
                 </div>   
             </form>
 

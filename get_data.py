@@ -54,7 +54,7 @@ def search_book(search_term):
 
     data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])
 
-    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=take_book&ISBN={0}">{0}</a>'.format(x))
+    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=book_by_ISBN&ISBN={0}">{0}</a>'.format(x))
         
     return data
 
@@ -186,6 +186,16 @@ def book_by_user(Name, all):
     data.drop(columns=["unix", "ID"], inplace=True)
         
     return data
+
+
+def return_protokoll():
+    cursor.execute("SELECT * FROM Protokoll")
+    data=cursor.fetchall()
+
+    data=pd.DataFrame(data, columns=["ID", "ProtokollID", "Art", "Text", "gebucht", "Datum"])
+    html_table=data.to_html()
+
+    return html_table
 
 
 def book_return(ID):

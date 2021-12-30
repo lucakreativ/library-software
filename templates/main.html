@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </li> 
-                <li><a href="">Protokoll</a></li>
+                <li><a href="/?site=protocol">Protokoll</a></li>
                 <li><a href="/?site=books">Buchverwaltung</a></li>
                 <li><a href="/?site=take_book">Buch ausleihen</a></li>
                 <li><a href="/">Übersicht</a></li>
@@ -34,18 +34,21 @@
     <body>
         <div id="main">
             
-            <form action="/" method="get">
-                
-                <input type="text" name="user" placeholder="Namen eingeben" value="{{name}}">
-                <input type="submit" value="Suchen">
+            
 
-            </form>
-            <form action="/" method="get">
-                <input type="submit" value="Zurücksetzen">
-            </form>
-
-            {% for table in tables %}
+            {% for table in tables %}            
             <h2>{{titles[loop.index]}}</h2>
+            <div id="left">
+                <form action="/" method="get">
+                    
+                    <input type="text" name="user" placeholder="Namen eingeben" value="{{name}}">
+                    <input type="submit" value="Suchen">
+
+                </form>
+                <form action="/" method="get">
+                    <input type="submit" value="Zurücksetzen" id="back_set">
+                </form>
+            </div>
             {{ table|safe }}
                 {% endfor %}
 
