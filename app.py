@@ -30,14 +30,6 @@ def home():
             titles = ['na', 'Ausgeliehen'])
 
 
-        elif site=="book_by_user":
-            all=False
-
-            name=request.args.get("name")
-            if name==None:
-                all=True
-            return (str(get_data.book_by_user(name, all)))
-
         elif site=="return_book":
             ID=request.args.get("ID")
             if ID==None:
@@ -69,7 +61,7 @@ def home():
 
             if user!=None and para=="1":
                 get_data.taking_book(ISBN, user, username)
-                return("True")
+                return(redirect("/"))
 
             elif para=="0":
                 return render_template("select_user_manuel.html", ISBN=ISBN, text="Geben sie bitte den Namen Manuell ein")
