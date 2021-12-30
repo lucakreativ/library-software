@@ -109,31 +109,25 @@ def get_microsoft_names(ISBN, surname):
 
 
 def book_by_user(Name, all):
-    data=[]
-    cursor.execute("SELECT * FROM Ausleihen")
-    inhalt=cursor.fetchall()
-    if all==False:
-        for row in inhalt:
-            if Name in row[1]:
-                
-                cursor.execute("SELECT * FROM Bücher WHERE ISBN=%s" % (row[2]))
-                inhalt=cursor.fetchall()
-                data.append(inhalt)
-            
-    else:
-        cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")
-        data=cursor.fetchall()
+
+
+    remove_row=[]
+
+    cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")
+    data=cursor.fetchall()
 
 
     data=pd.DataFrame(data, columns=["ID", "Name", "ausleih", "Titel", "Verlängert", "Protokoll-ID"])
     data.drop(data.columns[[5]], axis=1, inplace=True)
-    
+
     data["unix"]=""
 
     data["Verlängert"]=data["Verlängert"].replace(
         to_replace=1,
         value="schon Verlängert"
     )
+    data=data.drop_duplicates(subset=["ID"], keep="first")
+    data=data.reset_index(drop=True)
 
     for index in data.iterrows():
         num=index[0]
@@ -141,6 +135,16 @@ def book_by_user(Name, all):
 
         if data.iloc[num]["Verlängert"]==0:
             data.at[num, "Verlängert"]="""<form action="" method="get"><input type="hidden" name="site" value="keep_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="verlängern"></form>""" % (str(id))
+
+        if all==False:
+            p_name=data.iloc[num]["Name"]
+            if Name not in p_name:
+                remove_row.append(num)
+
+    data.drop(remove_row, inplace=True)
+
+    data=data.reset_index(drop=True)
+    
 
 
     for index in data.iterrows():
@@ -178,7 +182,7 @@ def book_by_user(Name, all):
     data=data.rename(columns={"ausleih":"Abgabe-Datum"})
     data=data.reset_index(drop=True)
 
-    data=data.drop_duplicates(subset=["ID"], keep="first")
+    
     data.drop(columns=["unix", "ID"], inplace=True)
         
     return data
