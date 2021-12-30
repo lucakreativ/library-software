@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title>Büchersoftware</title>
+
+        <link rel="stylesheet" href="/static/home.css" type="text/css">
+        <link rel="stylesheet" href="/static/footer.css" type="text/css">
+        <link rel="stylesheet" href="/static/header.css" type="text/css">
+
+        <meta charset="utf-8">
+    </head>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Account</button>
+                        <div class="dropdown-content">
+                          <a href="/?site=settings">Einstellungen</a>
+                          <a href="/?site=logout">Abmelden</a>
+                        </div>
+                    </div>
+                </li> 
+                <li><a href="">Protokoll</a></li>
+                <li><a href="/?site=books">Buchverwaltung</a></li>
+                <li><a href="/?site=take_book">Buch ausleihen</a></li>
+                <li><a href="/">Übersicht</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <body>
+        <div id="main">
+            <p>Bitte mit vorsicht behandeln, änderungen können nicht rückgänig gemacht werden!</p>
+            <form action="" method="get">
+                <input type="hidden" name="ID" value="{{ID}}">
+                <input type="hidden" name="site" value="book_by_ISBN">
+                <input type="hidden" name="save" value="1">
+                <input type="text" name="ISBN" value="{{ISBN}}">
+                <input type="text" name="Titel" value="{{Titel}}">
+                <input type="text" name="Autor" value="{{Autor}}">
+                <input type="submit" value="speichern">
+            </form>
+
+        </div>
+
+    </body>
+
+    <footer>
+        <div id="ge">
+            <p>&copy; lucakreativ, 2021</p>
+        <div>
+    </footer>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -40,13 +40,13 @@ def print_books():
 
     data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])
     
-    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=take_book&ISBN={0}">{0}</a>'.format(x))
+    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=book_by_ISBN&ISBN={0}">{0}</a>'.format(x))
 
     return data
 
 
 def search_book(search_term):
-    cursor.execute("SELECT * ISBN, Titel, Autor Bücher WHERE Titel LIKE '%"+search_term+"%' OR ISBN LIKE '%"+search_term+"%'")    
+    cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher WHERE Titel LIKE '%"+search_term+"%' OR ISBN LIKE '%"+search_term+"%'")    
 
 
     data=cursor.fetchall()
@@ -58,11 +58,20 @@ def search_book(search_term):
     return data
 
 
+def update_book(ISBN, Titel, Autor, id):
+    cursor.execute("""UPDATE Bücher SET ISBN='%s', Titel='%s', Autor='%s' WHERE ID='%s'""" % (ISBN, Titel, Autor, id))
+    conn.commit()
+
+
+def book_by_ISBN(ISBN):
+    cursor.execute("SELECT ISBN, Titel, Autor, ID FROM Bücher WHERE ISBN='%s'" % (ISBN))
+    data=cursor.fetchall()[0]
+    return(data)
+
+
 def keep_taking_print(id):
     cursor.execute("SELECT Verlängert FROM Ausleihen WHERE ID=%d" % (int(id)))
-    inhalt=cursor.fetchall()
-    print(inhalt)
-    data=inhalt[0][0]
+    data=cursor.fetchall()[0][0]
     return data
 
 
@@ -208,7 +217,7 @@ def change_password(username, old_pass, new1_pass, new2_pass):
         if new1_pass==new2_pass:
             new_pass_hash=hash_password(new1_pass)
             cursor.execute("""UPDATE Benutzer SET Passwort = '%s' WHERE Benutzername = '%s'""" % (new_pass_hash, username))
-        
+            conn.commit()
             return 0 #success
         else:
             return 2 #not same password
@@ -233,5 +242,3 @@ def login(username, password_i):
             return False
     except:
         return False
-
-get_microsoft_names("34645234", "Kevin")

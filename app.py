@@ -108,8 +108,36 @@ def home():
             else:
                 return (redirect("/"))
 
+        elif site=="book_by_ISBN":
+            save=request.args.get("save")
+            id=request.args.get("ID")
+            ISBN=request.args.get("ISBN")
+            Titel=request.args.get("Titel")
+            Autor=request.args.get("Autor")
+
+            if save=="1":
+                get_data.update_book(ISBN, Titel, Autor, id)
+                redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN))
+
+            data=get_data.book_by_ISBN(ISBN)
+
+            return render_template("book_by_ISBN.html", ISBN=data[0], Titel=data[1], Autor=data[2] , ID=data[3])
+        
+
         elif site=="settings":
-            return render_template("settings.html")
+            message=request.args.get("message")
+            if message!=None:
+                if message=="0":
+                    me="Passwort wurde erfolgreich geändert"
+                elif message=="1":
+                    me="Passwort stimmt nicht überein"
+                elif message=="2":
+                    me="Die neuen Passwörter stimmen nicht überein"
+
+                return render_template("settings.html", Message=me)
+
+            else:
+                return render_template("settings.html")
 
 
 
@@ -135,7 +163,7 @@ def save_settting():
 
     re=get_data.change_password(username, old_pass, new1_pass, new2_pass)
 
-    return str(re)
+    return redirect("/?site=settings&message=%s" % (re))
 
 
 @app.route('/login')
