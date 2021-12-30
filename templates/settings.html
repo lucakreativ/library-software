@@ -13,7 +13,7 @@
             <ul>
                 <li>
                     <div class="dropdown">
-                        <button class="dropbtn">Dropdown</button>
+                        <button class="dropbtn">Account</button>
                         <div class="dropdown-content">
                           <a href="/?site=settings">Einstellungen</a>
                           <a href="/?site=logout">Abmelden</a>
@@ -32,6 +32,7 @@
         <div id="main">
 
             <h1>Einstellungen</h1>
+            {{Message}}
             <form action="/save_setting" method="post">
                 <input type="hidden" name="order" value="change_pass">
                 <input type="password" name="old_pass" placeholder="Altes Passwort" required>
