@@ -9,6 +9,9 @@
         <meta charset="utf-8">
     </head>
     <header>
+        <div id="logo">
+            <img src="static/ico.png" alt="Schiller-Gymnasium Logo" width=100px height=auto>
+        </div>
         <nav>
             <ul>
                 <li>
@@ -30,6 +33,16 @@
 
     <body>
         <div id="main">
+            
+            <form action="/" method="get">
+                
+                <input type="text" name="user" placeholder="Namen eingeben" value="{{name}}">
+                <input type="submit" value="Suchen">
+
+            </form>
+            <form action="/" method="get">
+                <input type="submit" value="Zurücksetzen">
+            </form>
 
             {% for table in tables %}
             <h2>{{titles[loop.index]}}</h2>

@@ -1,5 +1,7 @@
 html {
     text-align: center;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -45,4 +47,5 @@ th {
 
 #main {
     height: auto;
+    margin-bottom: 100px;
 }
