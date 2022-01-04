@@ -35,7 +35,6 @@ def get_names_micro(surname):
         logging.info("No suitable token exists in cache. Let's get a new one from AAD.")
         result = app.acquire_token_for_client(scopes=config["scope"])
 
-    #endpoint="""https://graph.microsoft.com/v1.0/users?$search="surname:%s""givenName:%s"&$orderby=displayName """ % (name, surname)
     endpoint="""https://graph.microsoft.com/v1.0/users?$search="surname:%s"&$orderby=displayName """ % (surname)
 
     if "access_token" in result:
