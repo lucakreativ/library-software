@@ -1,4 +1,3 @@
-from logging import NOTSET
 from flask import Flask, render_template, request, redirect, session
 import time
 import get_data
@@ -148,15 +147,16 @@ def home():
 
 @app.route("/save_setting", methods=["POST"])
 def save_settting():
-    username=session["user"]
-    old_pass=request.form.get("order")
-    old_pass=request.form.get("old_pass")
-    new1_pass=request.form.get("new1_pass")
-    new2_pass=request.form.get("new2_pass")
+    if check_login():
+        username=session["user"]
+        old_pass=request.form.get("order")
+        old_pass=request.form.get("old_pass")
+        new1_pass=request.form.get("new1_pass")
+        new2_pass=request.form.get("new2_pass")
 
-    re=get_data.change_password(username, old_pass, new1_pass, new2_pass)
+        re=get_data.change_password(username, old_pass, new1_pass, new2_pass)
 
-    return redirect("/?site=settings&message=%s" % (re))
+        return redirect("/?site=settings&message=%s" % (re))
 
 
 @app.route('/login')
