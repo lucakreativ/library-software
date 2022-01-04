@@ -4,7 +4,7 @@ header {
     position: static;
     top: 0;
     left: 0;
-    background: #2c2c2c;
+    background: #666666;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }
@@ -48,7 +48,7 @@ header #logo {
 
 /* Dropdown Button */
 .dropbtn {
-    background-color: #2c2c2c;
+    background-color: #666666;
     color: white;
     font-size: 16px;
     border: none;
@@ -69,12 +69,12 @@ header #logo {
     min-width: 160px;
     box-shadow: 0px 16px 32px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    margin-left: -35px;
+    margin-left: -50px;
   }
   
   /* Links inside the dropdown */
   .dropdown-content a {
-    color: #2c2c2c;
+    color: #666666;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -87,4 +87,4 @@ header #logo {
   .dropdown:hover .dropdown-content {display: block;}
   
   /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {background-color: #2c2c2c;} 
+  .dropdown:hover .dropbtn {background-color: #666666;} 
