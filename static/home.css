@@ -87,3 +87,25 @@ th {
     width: 100%;
     height: 40px;
 }
+
+
+#manu {
+    width: 285px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#manu_bu {
+    width: 100%;
+}
+
+#search {
+    width: 285px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+#book_ins {
+    width: 100%;
+}
