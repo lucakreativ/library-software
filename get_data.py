@@ -243,7 +243,7 @@ def change_password(username, old_pass, new1_pass, new2_pass):
         return 1 #incorrect password
 
 
-def login(username, password_i):
+def login(username, password_i, ip):
     try:
         cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))
         
@@ -253,7 +253,7 @@ def login(username, password_i):
         
 
         if str(password)==str(hash):
-            protocol_write.write_in_ip_table(username)
+            protocol_write.write_in_ip_table(username, ip)
 
             return True
         else:
