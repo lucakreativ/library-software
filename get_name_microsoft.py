@@ -1,9 +1,11 @@
+from read_config import read_ms_config
 import json
 import logging
-
 import requests
 import msal
 
+config=read_ms_config()
+#print(config)
 
 def get_names_micro(surname):
 
@@ -12,7 +14,8 @@ def get_names_micro(surname):
     # Optional logging
     # logging.basicConfig(level=logging.DEBUG)
 
-    config = json.load(open("config.json"))
+    #config = json.load(open("config.json"))
+    print(config)
 
     # Create a preferably long-lived app instance which maintains a token cache.
     app = msal.ConfidentialClientApplication(
@@ -29,7 +32,8 @@ def get_names_micro(surname):
     # Firstly, looks up a token from cache
     # Since we are looking for token for the current app, NOT for an end user,
     # notice we give account parameter as None.
-    result = app.acquire_token_silent(config["scope"], account=None)
+    url=[config["scope"]]
+    result = app.acquire_token_silent(url, account=None)
 
     if not result:
         logging.info("No suitable token exists in cache. Let's get a new one from AAD.")

@@ -1,6 +1,6 @@
 from mysql.connector import MySQLConnection, Error
 import protocol_write
-from python_mysql_dbconfig import read_db_config
+from read_config import read_db_config
 from datetime import date
 from datetime import datetime
 from datetime import timedelta

@@ -21,3 +21,19 @@ def read_db_config(filename='config.ini', section='mysql'):
         raise Exception('{0} not found in the {1} file'.format(section, filename))
 
     return db
+
+
+def read_ms_config(filename="config.ini", section="ms-teams"):
+    parser = ConfigParser()
+    parser.read(filename)
+
+    # get section, default to mysql
+    ms = {}
+    if parser.has_section(section):
+        items = parser.items(section)
+        for item in items:
+            ms[item[0]] = item[1]
+    else:
+        raise Exception('{0} not found in the {1} file'.format(section, filename))
+
+    return ms

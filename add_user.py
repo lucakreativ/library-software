@@ -1,6 +1,6 @@
 import sys
 from mysql.connector import MySQLConnection, Error
-from python_mysql_dbconfig import read_db_config
+from read_config import read_db_config
 from get_data import hash_password
 
 dbconfig = read_db_config()
