@@ -1,10 +1,17 @@
 from flask import Flask, render_template, request, redirect, session
 import time
+import os
+import random
 import get_data
 
 
+random_string=""
+for i in range(16):
+    secret_integer=random.randint(0, 255)
+    random_string+=(chr(secret_integer))
+
 app = Flask(__name__)
-app.secret_key="sshh"
+app.secret_key=random_string
 
 
 max_time_in_m=10
@@ -84,10 +91,11 @@ def home():
             ISBN=request.args.get("ISBN")
             titel=request.args.get("titel")
 
-            if autor!=None and ISBN!=None and titel!=None:
-                get_data.insert_book(ISBN, titel, autor)
-            else:
-                return render_template("insert_book.html")
+            print(autor)
+            print(ISBN)
+            print(titel)
+            get_data.insert_book(ISBN, titel, autor)
+            return redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN))
 
         elif site=="keep_book":
             id=request.args.get("ID")
@@ -113,6 +121,8 @@ def home():
 
             return render_template("book_by_ISBN.html", ISBN=data[0], Titel=data[1], Autor=data[2] , ID=data[3])
         
+        elif site=="insert":
+            return render_template("insert.html")
 
         elif site=="settings":
             message=request.args.get("message")
@@ -120,7 +130,7 @@ def home():
                 if message=="0":
                     me="Passwort wurde erfolgreich geändert"
                 elif message=="1":
-                    me="Passwort stimmt nicht überein"
+                    me="Altes Passwort stimmt nicht überein"
                 elif message=="2":
                     me="Die neuen Passwörter stimmen nicht überein"
 
@@ -172,7 +182,8 @@ def validate():
     check_login()
     username=request.form.get("username")
     password=request.form.get("password")
-    if get_data.login(username, password)==True:
+    ip_addr = request.environ['REMOTE_ADDR']
+    if get_data.login(username, password, ip_addr)==True:
 
         session["login"]=2
         session["login_time"]=time.time()
@@ -201,5 +212,5 @@ def check_inactivity():
         return False
 
 
-        
-app.run()
+port=int(os.environ.get("PORT", 5001))
+app.run(host="0.0.0.0", port=port)
