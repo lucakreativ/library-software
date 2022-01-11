@@ -1,0 +1,6 @@
+configparser:       Copyright mdsitton (https://github.com/mdsitton/configparser-3.2.0r3)
+Flask:              Copyright Pallets  (https://github.com/pallets/flask)
+msal:               Copyright Microsoft Corporation (https://github.com/AzureAD/microsoft-authentication-library-for-python)
+MySQL Connector:    Copyright mysql/Oracle  (https://github.com/mysql/mysql-connector-python)
+pandas:             Copyright PyData Development Team   (https://github.com/pandas-dev/pandas)
+requests:           Copyright Python Software Foundation    (https://github.com/psf/requests)
