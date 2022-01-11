@@ -3,13 +3,19 @@
 
     <body>
         <div id="main">
+            <h2>Buchverwaltung</h2>
+            <div id="search">
             <form action="" method="get">
                 <input type="hidden" name="site" value="books">
                 <p>Nach ISBN oder Titel suchen:</p>
                 <input type="text" name="search" value="{{search}}" placeholder="ISBN oder Titel">
                 <input type="submit" value="suchen">
             </form>
-
+            <form action="" method="get">
+                <input type="hidden" name="site" value="insert">
+                <input type="submit" value="Buch hinzufügen" id="book_ins">
+            </form>
+            </div>
             {% for table in tables %}
             <h2>{{titles[loop.index]}}</h2>
             {{ table|safe }}

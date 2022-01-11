@@ -1,0 +1,21 @@
+<html>
+    {% include "header.html" %}
+
+    <body>
+        <div id="main">
+            <h2>Buch hinzufügen</h2>
+            <p>Geben Sie bitte die ISBN, den Titel und den Autor ein, um ein Buch hinzu zu fügen.</p>
+            <form action="" method="get">
+                <input type="hidden" name="site" value="insert_book">
+                <input type="text" name="ISBN" placeholder="ISBN" required>
+                <textarea name="titel" placeholder="Titel" required></textarea>
+                <input type="text" name="autor" placeholder="Autor" required>
+                <input type="submit" value="speichern">
+            </form>
+
+        </div>
+
+    </body>
+
+    {% include "footer.html" %}
+</html>

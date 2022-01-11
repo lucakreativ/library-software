@@ -4,13 +4,20 @@
     <body>
         <div id="main">
             <h2>{{text}}</h2>
-            <form action="/" method="GET">
-                <input type="hidden" name="site" value="take_book">
-                <input type="hidden" name="para" value="1">
-                <input type="hidden" name="ISBN" value="{{ISBN}}">
-                <input type="text" name="user" required>
-                <input type="submit" value="absenden">
-            </form>
+            <div id="manu">
+                <form action="/" method="GET">
+                    <input type="hidden" name="site" value="take_book">
+                    <input type="hidden" name="para" value="1">
+                    <input type="hidden" name="ISBN" value="{{ISBN}}">
+                    <input type="text" name="user" placeholder="Vollen Namen" required>
+                    <input type="submit" value="absenden">
+                </form>
+                <form action="/" method="GET">
+                    <input type="hidden" name="site" value="take_book">
+                    <input type="hidden" name="ISBN" value="{{ISBN}}">
+                    <input type="submit" value="zurück" id="manu_bu">
+                </form>
+            </div>
         </div>
 
     </body>

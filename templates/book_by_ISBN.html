@@ -3,13 +3,14 @@
 
     <body>
         <div id="main">
-            <p>Bitte mit vorsicht behandeln, änderungen können nicht rückgänig gemacht werden!</p>
+            <h2>Buch bearbeiten</h2>
+            <p>Bitte mit vorsicht behandeln, Änderungen können nicht rückgänig gemacht werden!</p>
             <form action="" method="get">
                 <input type="hidden" name="ID" value="{{ID}}">
                 <input type="hidden" name="site" value="book_by_ISBN">
                 <input type="hidden" name="save" value="1">
                 <input type="text" name="ISBN" value="{{ISBN}}">
-                <input type="text" name="Titel" value="{{Titel}}">
+                <textarea name="Titel">{{Titel}}</textarea>
                 <input type="text" name="Autor" value="{{Autor}}">
                 <input type="submit" value="speichern">
             </form>
@@ -20,15 +21,3 @@
 
     {% include "footer.html" %}
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
