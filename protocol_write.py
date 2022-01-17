@@ -18,8 +18,11 @@ def write_in_ip_table(user, ip):
 
 def write_in_protocol_table(type, name, user, param):
     cursor.execute("""SELECT max(ProtokollID) FROM Protokoll""")
-    id=int(cursor.fetchall()[0][0])
-    id+=1
+    id=cursor.fetchall()[0][0]
+    if id==None:
+        id=0
+    else:
+        id+=1
 
     type=int(type)
     if type==2:
