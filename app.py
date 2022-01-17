@@ -6,46 +6,47 @@ import get_data
 
 
 random_string=""
+
 for i in range(16):
-    secret_integer=random.randint(0, 255)
-    random_string+=(chr(secret_integer))
+    secret_integer=random.randint(0, 255)   #erzeugt zufällige ASCII - Zahl
+    random_string+=(chr(secret_integer))    #wandelt es zu einem Buchstaben um und wird zum String hinzugefügt
 
-app = Flask(__name__)
-app.secret_key=random_string
-
-
-max_time_in_m=10
-max_time_in_s=max_time_in_m*60
+app = Flask(__name__)           #App wird initialisiert
+app.secret_key=random_string    #übergibt den Zufallsstring um die Client-Session sicher zu halten
 
 
-@app.route("/")
+max_time_in_m=10                    #setzt inaktivitätszeit
+max_time_in_s=max_time_in_m*60      #wird in Sekunden umgerechnet
+
+
+@app.route("/")                             #wenn nur die IP-Adresse aufgerufen wird
 def home():
-    if not check_login():
-        return (redirect("/login"))
+    if not check_login():                   #überprüft, ob man schon eingeloggt ist
+        return (redirect("/login"))         #wenn nicht, dann wird man auf Login-Page weitergeleitet
     else:
-        site=request.args.get("site")
-        if site==None:
+        site=request.args.get("site")       #bekommt den Seiten-Parameter
+        if site==None:                      #Hauptseite
             all=False
-            name=request.args.get("user")
+            name=request.args.get("user")   #bekommt den Namen
             if name==None:
                 name=""
                 all=True
-            table=get_data.book_by_user(name, all)
-            return render_template("main.html", name=name,
-            tables=[table.to_html(escape=False)], titles = ['na', 'Ausgeliehen'])
+            table=get_data.book_by_user(name, all)                                  #bekommt Data von den Ausgeliehen Bücher+Namen
+            return render_template("main.html", name=name,                          #lädt die Hauptseite und übergibt Werte zum anzeigen
+            tables=[table.to_html(escape=False)], titles = ['na', 'Ausgeliehen'])   #Tabelle wird in HTML und dann angezeigt
 
 
-        elif site=="return_book":
-            ID=request.args.get("ID")
-            if ID==None:
+        elif site=="return_book":           #Wenn Seite Buch zurückgeben aufgerufen wird
+            ID=request.args.get("ID")       #Wird Ausleih-ID abgefragt
+            if ID==None:                    #Wenn keine mitgegeben wurde, wird man zur Hauptseite weitergeleitet
                 return (redirect("/"))
 
-            get_data.book_return(ID)
+            get_data.book_return(ID)        #Buch wird zurückgegeben mit der Ausleih-ID
 
             return(redirect("/"))
         
-        elif site=="books":
-            search=request.args.get("search")
+        elif site=="books":                     #Buchverwaltung wird aufgerufen
+            search=request.args.get("search")   #Fragt den Buch-Parameter ab
 
             if search==None:
                 data=get_data.print_books()
