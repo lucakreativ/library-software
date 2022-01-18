@@ -19,21 +19,21 @@ max_time_in_m=10                    #setzt inaktivitätszeit
 max_time_in_s=max_time_in_m*60      #wird in Sekunden umgerechnet
 
 
-@app.route("/")                             #wenn nur die IP-Adresse aufgerufen wird
+@app.route("/")                             #wenn nur die Domain aufgerufen wird
 def home():
     if not check_login():                   #überprüft, ob man schon eingeloggt ist
         return (redirect("/login"))         #wenn nicht, dann wird man auf Login-Page weitergeleitet
     else:
         site=request.args.get("site")       #bekommt den Seiten-Parameter
-        if site==None:                      #Hauptseite
+        if site==None:                      #ohne Parameter
             all=False
             name=request.args.get("user")   #bekommt den Namen
             if name==None:
                 name=""
                 all=True
-            table=get_data.book_by_user(name, all)                                  #bekommt Data von den Ausgeliehen Bücher+Namen
+            table=get_data.book_by_user(name, all)                                  #bekommt Data von den Ausgeliehen Büchern+Namen
             return render_template("main.html", name=name,                          #lädt die Hauptseite und übergibt Werte zum anzeigen
-            tables=[table.to_html(escape=False)], titles = ['na', 'Ausgeliehen'])   #Tabelle wird in HTML und dann angezeigt
+            tables=[table.to_html(escape=False)], titles = ['na', 'Ausgeliehen'])   #Tabelle wird in HTML umgewandelt und dann angezeigt
 
 
         elif site=="return_book":           #Wenn Seite Buch zurückgeben aufgerufen wird
