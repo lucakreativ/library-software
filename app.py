@@ -48,43 +48,43 @@ def home():
         elif site=="books":                     #Buchverwaltung wird aufgerufen
             search=request.args.get("search")   #Fragt den Buch-Parameter ab
 
-            if search==None:
-                data=get_data.print_books()
-                return render_template("book.html", search="",
-                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])
+            if search==None:                    #keine Such request
+                data=get_data.print_books()     #bekommt alle Bücher
+                return render_template("book.html", search="",     #lädt die HTML-Seite und übergibt Werte zum anzeigen                 
+                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])     #Tabelle wird in HTML umgewandelt und dann angezeigt
                 
             else:
-                data=get_data.search_book(search)
-                return render_template("book.html", search=search,
-                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])
+                data=get_data.search_book(search)       #bekommt Bücher mit Inhalt von "search"
+                return render_template("book.html", search=search,      #lädt die HTML-Seite und übergibt die Werte
+                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher']) #Tabelle wird in HTML umgewandelt und dann angezeigt
 
 
-        elif site=="take_book":
-            ISBN=request.args.get("ISBN")
-            user=request.args.get("user")
-            para=request.args.get("para")
-            username=session["user"]
+        elif site=="take_book":             #wenn Seite Buchausleihen aufgerufen wird
+            ISBN=request.args.get("ISBN")   #bekommt ISBN
+            user=request.args.get("user")   #bekommt den Namen
+            para=request.args.get("para")   #bekommt Computer-Generierten Parameter
+            username=session["user"]        #bekommt den angemeldeten Benutzer
 
-            if user!=None and para=="1":
-                get_data.taking_book(ISBN, user, username)
-                return(redirect("/"))
+            if user!=None and para=="1":    #Buch soll ausgeliehen werden
+                get_data.taking_book(ISBN, user, username) #übergibt die Parameter
+                return(redirect("/")) #wird zu Hauptseite weitergeleitet
 
-            elif para=="0":
-                return render_template("select_user_manuel.html", ISBN=ISBN, text="Geben sie bitte den Namen Manuell ein")
+            elif para=="0": #Name soll Manuelle gespeichert werden
+                return render_template("select_user_manuel.html", ISBN=ISBN, text="Geben sie bitte den Namen Manuell ein") #Lädt die Seite zum Namen manuell eingeben
 
-            elif user!=None:
-                names, bo = get_data.get_microsoft_names(ISBN, user)
+            elif user!=None:    #Nutzer wurde mitgegeben
+                names, bo = get_data.get_microsoft_names(ISBN, user)    #bekommt alle Namen an der Schule und übergibt, ob welche gefunden wurden
 
-                if bo==True:
-                    return render_template("select_user.html", ISBN=ISBN, tables=[names.to_html(escape=False)], titles = ['na', 'Namen'])
-                else:
-                    return render_template("select_user_manuel.html", ISBN=ISBN, text="Leider konnten wir keinen mit dem Namen finden, bitte geben sie den Namen manuell ein.")
+                if bo==True:    #Wenn Namen gefunden wurden
+                    return render_template("select_user.html", ISBN=ISBN, tables=[names.to_html(escape=False)], titles = ['na', 'Namen'])   #lädt HTML-Seite, übergibt Werte und wandelt Tabelle in HTML um
+                else: #Wenn keine Gefunden wurden
+                    return render_template("select_user_manuel.html", ISBN=ISBN, text="Leider konnten wir keinen mit dem Namen finden, bitte geben sie den Namen manuell ein.") #lädt HTML-Seite und übergibt "kein Name wurde gefunden"
                 
 
-            else:
-                if ISBN!=None:
-                    return render_template("taking_book.html", ISBN=ISBN)
-                else:
+            else:   #Alle anderen Fälle
+                if ISBN!=None: #ISBN wurde übergeben
+                    return render_template("taking_book.html", ISBN=ISBN)   #lädt Seite um den Namen einzugeben und ISBN wird angezeigt
+                else:   #keine ISBN wurde übergeben
                     return render_template("taking_book.html", ISBN="")
 
         elif site=="insert_book":
@@ -92,9 +92,6 @@ def home():
             ISBN=request.args.get("ISBN")
             titel=request.args.get("titel")
 
-            print(autor)
-            print(ISBN)
-            print(titel)
             get_data.insert_book(ISBN, titel, autor)
             return redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN))
 
