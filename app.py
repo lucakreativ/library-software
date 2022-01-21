@@ -85,57 +85,57 @@ def home():
                 if ISBN!=None: #ISBN wurde übergeben
                     return render_template("taking_book.html", ISBN=ISBN)   #lädt Seite um den Namen einzugeben und ISBN wird angezeigt
                 else:   #keine ISBN wurde übergeben
-                    return render_template("taking_book.html", ISBN="")
+                    return render_template("taking_book.html", ISBN="") #lädt die Seite ohne die ISBN eingetragen
 
-        elif site=="insert_book":
-            autor=request.args.get("autor")
-            ISBN=request.args.get("ISBN")
-            titel=request.args.get("titel")
+        elif site=="insert_book": #Seite Buch hinzufügen wurde aufgerufen
+            autor=request.args.get("autor") #bekommt den Autor
+            ISBN=request.args.get("ISBN") #bekommt die ISBN
+            titel=request.args.get("titel") #bekommt den Buch-Titel
 
-            get_data.insert_book(ISBN, titel, autor)
-            return redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN))
+            get_data.insert_book(ISBN, titel, autor) #fügt das Buch zur Datenbank hinzu
+            return redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN)) #weiterleitung zu Buch editier-seite
 
-        elif site=="keep_book":
-            id=request.args.get("ID")
+        elif site=="keep_book": #Seite Buch verlängern wurde aufgerufen
+            id=request.args.get("ID") #holt die Ausleih-ID
 
-            if id!=None:
-                get_data.keep_taking(id)
-                return (redirect("/"))
-            else:
-                return (redirect("/"))
+            if id!=None: #ID wurde mitgegeben
+                get_data.keep_taking(id) #verlängert Buch bei ID
+                return (redirect("/")) #weiterleitung zur Hauptseite
+            else: #keine ID wurde mitgegeben
+                return (redirect("/")) #wird zur Haupseite weitergeleitet
 
-        elif site=="book_by_ISBN":
-            save=request.args.get("save")
-            id=request.args.get("ID")
-            ISBN=request.args.get("ISBN")
-            Titel=request.args.get("Titel")
-            Autor=request.args.get("Autor")
+        elif site=="book_by_ISBN": #Spezifisches Buch wurde aufgerufen
+            save=request.args.get("save") #bekommt ob speicher soll
+            id=request.args.get("ID") #bekommmt ID
+            ISBN=request.args.get("ISBN") #bekommt ISBN
+            Titel=request.args.get("Titel") #bekommt Titel
+            Autor=request.args.get("Autor") #bekommt Autor
 
-            if save=="1":
-                get_data.update_book(ISBN, Titel, Autor, id)
-                redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN))
+            if save=="1": #soll gespeichert werden
+                get_data.update_book(ISBN, Titel, Autor, id) #Daten werden zum Buch gespeichert
+                redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN)) #Seite wird neu geladen
 
-            data=get_data.book_by_ISBN(ISBN)
+            data=get_data.book_by_ISBN(ISBN) #ruft Daten zum Buch ab
 
-            return render_template("book_by_ISBN.html", ISBN=data[0], Titel=data[1], Autor=data[2] , ID=data[3])
+            return render_template("book_by_ISBN.html", ISBN=data[0], Titel=data[1], Autor=data[2] , ID=data[3]) #lädt HTML-Seite und gibt Daten zum zeigen mit
         
-        elif site=="insert":
-            return render_template("insert.html")
+        elif site=="insert": #Buch hinzufügen Seite
+            return render_template("insert.html") #laden der HTML-Seite
 
-        elif site=="settings":
-            message=request.args.get("message")
-            if message!=None:
-                if message=="0":
+        elif site=="settings": #Einstllungen werden aufgerufen
+            message=request.args.get("message") #Nachricht die angezeigt werden soll wird geholt
+            if message!=None: #Wenn es eine gibt
+                if message=="0": #0=Erfolgreich
                     me="Passwort wurde erfolgreich geändert"
-                elif message=="1":
+                elif message=="1":#1=Fehler
                     me="Altes Passwort stimmt nicht überein"
-                elif message=="2":
+                elif message=="2":#2=Fehler
                     me="Die neuen Passwörter stimmen nicht überein"
 
-                return render_template("settings.html", Message=me)
+                return render_template("settings.html", Message=me) #laden der HTML-Seite mit der Nachricht
 
-            else:
-                return render_template("settings.html")
+            else: #wenn keine mitgegeben wird
+                return render_template("settings.html") #laden der HTML-Seite ohne Nachricht
 
         elif site=="protocol":
             table=get_data.return_protokoll()
