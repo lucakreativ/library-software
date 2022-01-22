@@ -207,6 +207,7 @@ def check_login():  #überprüft login
 def check_inactivity(): #überprüft Inaktivität
     delta=time.time()-float(session.get("login_time")) #Zeit seit letzter Aktivität
     if delta<max_time_in_s: #Wenn unterschied geringer als max_inaktivitätszeit
+        session["login_time"]=time.time()
         return True
     else:
         return False
