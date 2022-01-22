@@ -175,29 +175,28 @@ def login(): #wird ausgeführt, wenn @app.route richtig ist
     return render_template("login.html") #login-Seite wird angezeigt
 
 @app.route("/loginf") #falsch eingeloggt
-def loginf(): #wird ausgeführt, wenn @pp.route richtig ist
+def loginf(): #wird ausgeführt, wenn @app.route richtig ist
     return render_template("loginf.html") #login-Seit wird angezeigt mit Error message
 
-@app.route("/validate", methods=["POST"])
-def validate():
-    check_login()
-    username=request.form.get("username")
-    password=request.form.get("password")
-    ip_addr = request.environ['REMOTE_ADDR']
-    if get_data.login(username, password, ip_addr)==True:
+@app.route("/validate", methods=["POST"]) #überprüft die Anmeldedaten
+def validate(): #wird ausgeführt, wenn @app.route richtig ist
+    username=request.form.get("username") #bekommt user-name
+    password=request.form.get("password") #bekommt Passwort
+    ip_addr = request.environ['REMOTE_ADDR'] #bekommt IP-Adresse vom Client
+    if get_data.login(username, password, ip_addr)==True: #übergibt die Anmeldedaten und bekommt True/False zurück
 
-        session["login"]=2
-        session["login_time"]=time.time()
-        session["user"]=username
+        session["login"]=2  #speichert Login-State
+        session["login_time"]=time.time() #speichert Login-Zeit für inactivitäts-check
+        session["user"]=username    #speichert den Benutzername
 
-        return redirect("/")
-    else:
-        return redirect("/loginf")
+        return redirect("/")    #wird zu Hauptseite weitergeleitet
+    else:   #wenn Anmeldedaten Falsch sind
+        return redirect("/loginf") #wird zur Anmeldeseite weitergeleitet und Fehlermeldung angezeigt
     
 
-def check_login():
-    if session.get("login")==2:
-        if check_inactivity()==True:
+def check_login():  #überprüft login
+    if session.get("login")==2: #überprüft Login-Schritt
+        if check_inactivity()==True: #überprüft
             return True
         else:
             return False
@@ -205,13 +204,13 @@ def check_login():
     else:
         return False
 
-def check_inactivity():
-    delta=time.time()-float(session.get("login_time"))
-    if delta<max_time_in_s:
+def check_inactivity(): #überprüft Inaktivität
+    delta=time.time()-float(session.get("login_time")) #Zeit seit letzter Aktivität
+    if delta<max_time_in_s: #Wenn unterschied geringer als max_inaktivitätszeit
         return True
     else:
         return False
 
 
-port=int(os.environ.get("PORT", 5000))
-app.run(host="0.0.0.0", port=port)
+port=int(os.environ.get("PORT", 5000))  #konfiguriert den Port
+app.run(host="0.0.0.0", port=port)  #konfiguriert die App
