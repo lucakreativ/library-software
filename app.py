@@ -137,18 +137,18 @@ def home():
             else: #wenn keine mitgegeben wird
                 return render_template("settings.html") #laden der HTML-Seite ohne Nachricht
 
-        elif site=="protocol":
-            table=get_data.return_protokoll()
-            return table
+        elif site=="protocol": #Protokoll wurde aufgerufen
+            table=get_data.return_protokoll() #bekommt Protokoll als HTML-Code
+            return table    #Wird auf der Seite angezeigt
 
 
 
-        elif site=="logout":
-            session.clear()
-            return(redirect("/login"))
+        elif site=="logout":    #ausloggen wird aufgerufe
+            session.clear()     #alle Daten werden gelöscht
+            return(redirect("/login")) #wird zur Login-Seite weitergeleitet
 
-        else:
-            return("Seite nicht gefunden")
+        else:   #keine gültige Seite wurde aufgerufen
+            return("Seite nicht gefunden") #404-Page wird angezeigt
 
 
 
