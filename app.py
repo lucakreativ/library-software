@@ -170,9 +170,9 @@ def save_settting():    #wird ausgeführt, wenn @app.route richtig ist
         return redirect("/login") #wird man zur Login-Seite weitergeleitet
 
 
-@app.route('/login')
-def login():
-    return render_template("login.html")
+@app.route('/login') #Lgoin-Seite wurde aufgerufen
+def login(): #wird ausgeführt, wenn @app.route richtig ist
+    return render_template("login.html") #login-Seite wird angezeigt
 
 @app.route("/loginf")
 def loginf():
