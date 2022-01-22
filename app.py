@@ -174,9 +174,9 @@ def save_settting():    #wird ausgeführt, wenn @app.route richtig ist
 def login(): #wird ausgeführt, wenn @app.route richtig ist
     return render_template("login.html") #login-Seite wird angezeigt
 
-@app.route("/loginf")
-def loginf():
-    return render_template("loginf.html")
+@app.route("/loginf") #falsch eingeloggt
+def loginf(): #wird ausgeführt, wenn @pp.route richtig ist
+    return render_template("loginf.html") #login-Seit wird angezeigt mit Error message
 
 @app.route("/validate", methods=["POST"])
 def validate():
