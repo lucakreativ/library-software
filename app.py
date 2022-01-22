@@ -20,7 +20,7 @@ max_time_in_s=max_time_in_m*60      #wird in Sekunden umgerechnet
 
 
 @app.route("/")                             #wenn nur die Domain aufgerufen wird
-def home():
+def home():                                 #wird ausgeführt, wenn @pp.route richtig ist
     if not check_login():                   #überprüft, ob man schon eingeloggt ist
         return (redirect("/login"))         #wenn nicht, dann wird man auf Login-Page weitergeleitet
     else:
@@ -153,18 +153,21 @@ def home():
 
 
 
-@app.route("/save_setting", methods=["POST"])
-def save_settting():
-    if check_login():
-        username=session["user"]
-        old_pass=request.form.get("order")
-        old_pass=request.form.get("old_pass")
-        new1_pass=request.form.get("new1_pass")
-        new2_pass=request.form.get("new2_pass")
+@app.route("/save_setting", methods=["POST"]) #Änderungen werden gepseichert und mit der Methode Post übergeben
+def save_settting():    #wird ausgeführt, wenn @app.route richtig ist
+    if check_login():   #überprüft, ob der Nutzer eingeloggt ist
+        username=session["user"]    #bekommt den angemeldeten Benutzer
+        olrder=request.form.get("order") #was geändert werden soll
+        old_pass=request.form.get("old_pass") #altes Passwort zu verifizierung
+        new1_pass=request.form.get("new1_pass") #neues Passwort
+        new2_pass=request.form.get("new2_pass") #neues Passwort wiederholung
 
-        re=get_data.change_password(username, old_pass, new1_pass, new2_pass)
+        re=get_data.change_password(username, old_pass, new1_pass, new2_pass) #Übergibt die Werte und bekommt message zurück
 
-        return redirect("/?site=settings&message=%s" % (re))
+        return redirect("/?site=settings&message=%s" % (re)) #wird zu Eintellungen weitergeleitet und message wird übergeben
+    
+    else:   #wenn man nicht eingeloggt ist
+        return redirect("/login") #wird man zur Login-Seite weitergeleitet
 
 
 @app.route('/login')
