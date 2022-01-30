@@ -11,63 +11,63 @@ import time
 
 
 
-inactive_time_m=100
-inactive_time_s=inactive_time_m*60
-start_time=[0]
-time_to_have=7*4 #4 Weeks
+inactive_time_m=10 #setzt die maximale Inaktivitätszeit
+inactive_time_s=inactive_time_m*60 #wird in Sekunden umgerechnet
+start_time=[0]  #speicher für Login-Zeit
+time_to_have=7*4 #wie lange ein Buch ausgeliehen werden darf
     
-dbconfig = read_db_config()
-conn = MySQLConnection(**dbconfig)
-cursor = conn.cursor()
+dbconfig = read_db_config() #benutzt library Config-Reder für die Konfiguration
+conn = MySQLConnection(**dbconfig) #verbindung zur Datenbank wird hergestellt
+
+cursor = conn.cursor() #setzt den Curser, der die Befehle ausführt
 
 
 
 
 
-def print_all(table, table_name):
-    cursor.execute("SELECT * FROM "+table)
-    data=cursor.fetchall()
+def print_all(table, table_name): #eine komplette Tabelle soll ausgegeben werden
+    cursor.execute("SELECT * FROM "+table) #führt den Befehl aus
+    data=cursor.fetchall()#übergibt die Daten
 
-    data=pd.DataFrame(data, columns=table_name)
+    data=pd.DataFrame(data, columns=table_name) #Tabelle wird mit Pandas erstellt und übergibt die Spalten-Namen
     
-    html_table=data.to_html()
+    html_table=data.to_html()#Tabelle wird in HTML-Code umgewandelt
         
-    return html_table
+    return html_table#übergibt die HTML-Tabelle
 
+def print_books():#alle gespeicherten Bücher sollen angezeigt werden
+    cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher")#bekommt ISBN, Titel, Autor von Tabelle Bücher
+    data=cursor.fetchall()#übergibt die Daten
 
-def print_books():
-    cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher")
-    data=cursor.fetchall()
-
-    data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])
+    data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])#Tabelle wird mit Pandas erstellt und übergibt die Spalten-Namen
     
-    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=book_by_ISBN&ISBN={0}">{0}</a>'.format(x))
+    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=book_by_ISBN&ISBN={0}">{0}</a>'.format(x))#Link mit spezieller ISBN für die Veränderung der Buch-Daten
 
-    return data
-
-
-def search_book(search_term):
-    cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher WHERE Titel LIKE '%"+search_term+"%' OR ISBN LIKE '%"+search_term+"%'")    
+    return data#übergibt die Tabelle
 
 
-    data=cursor.fetchall()
+def search_book(search_term): #suche nach Buch
+    cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher WHERE Titel LIKE '%"+search_term+"%' OR ISBN LIKE '%"+search_term+"%'")  #sucht nach ISBN oder Titel  
 
-    data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])
 
-    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=book_by_ISBN&ISBN={0}">{0}</a>'.format(x))
+    data=cursor.fetchall()#übergibt die Daten
+
+    data=pd.DataFrame(data, columns=["ISBN", "Name", "Autor"])#erstellt Tabelle mit den Spalten-Namen
+
+    data["ISBN"]=data["ISBN"].apply(lambda x:'<a href="/?site=book_by_ISBN&ISBN={0}">{0}</a>'.format(x))#Link mit spezieller ISBN für die Veränderung der Buch-Daten
         
-    return data
+    return data#übergibt die Tabelle
 
 
-def update_book(ISBN, Titel, Autor, id):
-    cursor.execute("""UPDATE Bücher SET ISBN='%s', Titel='%s', Autor='%s' WHERE ID='%s'""" % (ISBN, Titel, Autor, id))
-    conn.commit()
+def update_book(ISBN, Titel, Autor, id):#Daten vom Buch aktualisieren
+    cursor.execute("""UPDATE Bücher SET ISBN='%s', Titel='%s', Autor='%s' WHERE ID='%s'""" % (ISBN, Titel, Autor, id))#übergibt Daten in der Datenbank
+    conn.commit()#speichert Daten in Datenbank
 
 
-def book_by_ISBN(ISBN):
-    cursor.execute("SELECT ISBN, Titel, Autor, ID FROM Bücher WHERE ISBN='%s'" % (ISBN))
-    data=cursor.fetchall()[0]
-    return(data)
+def book_by_ISBN(ISBN):#bekommt Buchdaten für die Bearbeitung
+    cursor.execute("SELECT ISBN, Titel, Autor, ID FROM Bücher WHERE ISBN='%s'" % (ISBN))#holt Daten aus Datenbank, per ISBN
+    data=cursor.fetchall()[0]#bekommt 1st Element
+    return data #übergibt Liste mit Informationen
 
 
 def keep_taking_print(id):
