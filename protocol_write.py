@@ -1,4 +1,4 @@
-from mysql.connector import MySQLConnection, Error
+from mysql.connector import MySQLConnection
 from read_config import read_db_config
 from datetime import date, datetime, time
 
