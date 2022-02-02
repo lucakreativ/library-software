@@ -126,6 +126,11 @@ def book_by_user(Name, all):
         to_replace=1,
         value="schon Verlängert"
     )
+
+    data["Verlängert"]=data["Verlängert"].replace(
+        to_replace=0,
+        value="0"
+    )
     data=data.drop_duplicates(subset=["ID"], keep="first")
     data=data.reset_index(drop=True)
 
@@ -133,7 +138,7 @@ def book_by_user(Name, all):
         num=index[0]
         id=data.iloc[num]["ID"]
 
-        if data.iloc[num]["Verlängert"]==0:
+        if data.iloc[num]["Verlängert"]=="0":
             data.at[num, "Verlängert"]="""<form action="" method="get"><input type="hidden" name="site" value="keep_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="verlängern"></form>""" % (str(id))
 
         if all==False:
