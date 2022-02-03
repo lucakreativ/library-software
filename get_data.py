@@ -80,16 +80,15 @@ def insert_book(ISBN, Titel, Autor):#fügt Buch hinzu
     conn.commit()#speichert Daten
 
 
-def get_microsoft_names(surname):
-    names=get_name_microsoft.get_names_micro(surname)
+def get_microsoft_names(ISBN, surname):
+    names=get_name_microsoft.get_names_micro(surname) #bekommt alle Schüler bei Nachname/Teil
 
+    data=pd.DataFrame(names)#Tabelle wird mit Pandas erstellt
+    data=data.rename(columns={0:"Namen"})#ändert den Spalten-Namen
 
-    data=pd.DataFrame(names)
-    data=data.rename(columns={0:"Namen"})
-
-    for index in data.iterrows():
-        num=index[0]
-        name=data.iloc[num]["Namen"]
+    for index in data.iterrows():#itterriert durch die Datenbenk
+        num=index[0]#bekommt Tabellen-Nummer bei Index
+        name=data.iloc[num]["Namen"]#bekommt Namen von der Tabelle
 
         data.at[num, "auswählen"]="""<form action="" method="get"><input type="hidden" name="site" value="take_book"><input type="hidden" name="para" value="1"><input type="hidden" name="ISBN" value="%s"><input type="hidden" name="user" value="%s"><input type="submit" value="auswäheln"></form>""" % (ISBN, name)
 
