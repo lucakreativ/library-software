@@ -70,12 +70,6 @@ def book_by_ISBN(ISBN):#bekommt Buchdaten für die Bearbeitung
     return data #übergibt Liste mit Informationen
 
 
-def keep_taking_print(id):
-    cursor.execute("SELECT Verlängert FROM Ausleihen WHERE ID=%d" % (int(id)))
-    data=cursor.fetchall()[0][0]
-    return data
-
-
 def keep_taking(id):
     cursor.execute("UPDATE Ausleihen SET Verlängert=1 WHERE ID=%d" % (int(id)))
     conn.commit()
