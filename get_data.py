@@ -86,103 +86,96 @@ def get_microsoft_names(ISBN, surname):
     data=pd.DataFrame(names)#Tabelle wird mit Pandas erstellt
     data=data.rename(columns={0:"Namen"})#ändert den Spalten-Namen
 
-    for index in data.iterrows():#itterriert durch die Datenbenk
+    for index in data.iterrows():#iteriert durch die Datenbenk
         num=index[0]#bekommt Tabellen-Nummer bei Index
         name=data.iloc[num]["Namen"]#bekommt Namen von der Tabelle
 
-        data.at[num, "auswählen"]="""<form action="" method="get"><input type="hidden" name="site" value="take_book"><input type="hidden" name="para" value="1"><input type="hidden" name="ISBN" value="%s"><input type="hidden" name="user" value="%s"><input type="submit" value="auswäheln"></form>""" % (ISBN, name)
+        data.at[num, "auswählen"]="""<form action="" method="get"><input type="hidden" name="site" value="take_book"><input type="hidden" name="para" value="1"><input type="hidden" name="ISBN" value="%s"><input type="hidden" name="user" value="%s"><input type="submit" value="auswäheln"></form>""" % (ISBN, name)#erstellt einen Knopf zum ausleihen auf den Schüler
 
 
-    if len(names)>0:
-        return(data, True)
+    if len(names)>0:#Namen wurden gefunden
+        return(data, True)#übergibt Namen und dass welche gefunden wurden
         
-    else:
-        return(data, False)
+    else:#keine Namen wurden gefunden
+        return(data, False)#übergibt leere Liste und dass keine gefunden wurden
 
 
-def book_by_user(Name, all):
+def book_by_user(Name, all):#zeigt alle/von Nutzer ausgeliehenen Bücher an
 
 
-    remove_row=[]
+    remove_row=[]#alle Einträge, die gelöscht werden sollen
 
-    cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")
-    data=cursor.fetchall()
+    cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")#bekommt alle ausgeliehenen Bücher
+    data=cursor.fetchall()#übergibt alle Daten
 
 
-    data=pd.DataFrame(data, columns=["ID", "Name", "ausleih", "Titel", "Verlängert", "Protokoll-ID"])
-    data.drop(data.columns[[5]], axis=1, inplace=True)
+    data=pd.DataFrame(data, columns=["ID", "Name", "ausleih", "Titel", "Verlängert", "Protokoll-ID"])#ertsellt Tabelle mit Pandas und übergibt Spalten-Namen
+    data.drop(data.columns[[5]], axis=1, inplace=True)#löscht unnötise Spalte
 
-    data["unix"]=""
+    data["unix"]=""#fügt Spalte mit ausleihzeit hinzu
 
-    data["Verlängert"]=data["Verlängert"].replace(
+    data["Verlängert"]=data["Verlängert"].replace(#ersetzt 1 mit "schon verlängert"
         to_replace=1,
         value="schon Verlängert"
     )
 
-    data["Verlängert"]=data["Verlängert"].replace(
+    data["Verlängert"]=data["Verlängert"].replace(#wandelt int in string um, sonst gibt es einen Bug
         to_replace=0,
         value="0"
     )
-    data=data.drop_duplicates(subset=["ID"], keep="first")
-    data=data.reset_index(drop=True)
+    data=data.drop_duplicates(subset=["ID"], keep="first")#löscht doppelte Einträge
+    data=data.reset_index(drop=True)#vergibt neuen Index
 
-    for index in data.iterrows():
-        num=index[0]
-        id=data.iloc[num]["ID"]
+    for index in data.iterrows():#iteriet durch die Datenbank
+        num=index[0]#bekommt Tabellen-Nummer bei Index
+        id=data.iloc[num]["ID"]#bekommt Ausleih-ID von Tabellen-Nummer
 
-        if data.iloc[num]["Verlängert"]=="0":
-            data.at[num, "Verlängert"]="""<form action="" method="get"><input type="hidden" name="site" value="keep_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="verlängern"></form>""" % (str(id))
+        if data.iloc[num]["Verlängert"]=="0":#wenn noch nicht verlängert wurde
+            data.at[num, "Verlängert"]="""<form action="" method="get"><input type="hidden" name="site" value="keep_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="verlängern"></form>""" % (str(id))#erstellt einen Knopf zum verlängern des Buchs
 
-        if all==False:
-            p_name=data.iloc[num]["Name"]
-            if Name not in p_name:
-                remove_row.append(num)
+        if all==False:#wurde nach Name gesucht
+            p_name=data.iloc[num]["Name"]#bekommt den Namen
+            if Name not in p_name:#überprüft, ob es nicht der gesuchte Name ist
+                remove_row.append(num)#fügt Reihe-Nummer hinzu, zum löschen
 
-    data.drop(remove_row, inplace=True)
+    data.drop(remove_row, inplace=True)#löschet allen Reihen in Liste
 
-    data=data.reset_index(drop=True)
+    data=data.reset_index(drop=True)#setzt den Index neu
     
+    data["zurückgeben"]=""#fügt Tpalte hinzu
 
+    for index in data.iterrows():#iteriet durch die angepasste Tabelle
+        num=index[0]#bekommt Tabellen-Nummer bei Index
+        id=data.iloc[num]["ID"]#Ausleih-Datei
+        take_time=data.iloc[num]["ausleih"]#Ausleihdatum
+        ver=data.iloc[num]["Verlängert"]#verlängert-Status
+        start = datetime.strptime(str(take_time), "%Y-%m-%d")#wandelt String in Datetime um, zur Zeitrechnung
+        enddate=start+timedelta(days=time_to_have)#Abgabezeitpunkt = Ausleihzeipunkt + Ausleihzeitraum (4 Wochen)
 
-    for index in data.iterrows():
-        num=index[0]
-        take_time=data.iloc[num]["ausleih"]
-        ver=data.iloc[num]["Verlängert"]
-        start = datetime.strptime(str(take_time), "%Y-%m-%d")
-        enddate=start
-        enddate=start+timedelta(days=time_to_have)
+        if ver=="schon Verlängert":#wurde verlängert
+            enddate=enddate+timedelta(days=time_to_have)#addiert nochmal 4 Wochen
 
-        if ver=="schon Verlängert":
-            enddate=enddate+timedelta(days=time_to_have)
-
-        if enddate<datetime.now():
-            cell="""<div id='to_late'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))
+        if enddate<datetime.now():#überprüft, ob das Buch überfällig ist
+            cell="""<div id='to_late'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))#ist überfällig, wird rot markiert und Abgabezeitpunkt angezeigt
         else:
-            cell="""<div id='in_time'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))
+            cell="""<div id='in_time'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))#ist nicht überfällig, wird grün markiert und Abgabezeitpunkt angezeigt
 
-        data.at[num, "ausleih"]=cell
+        data.at[num, "ausleih"]=cell#wird in Spalte "ausleih" angezeigt
 
-        unix=time.mktime(enddate.timetuple())
-        data.at[num, "unix"]=unix
+        unix=time.mktime(enddate.timetuple())#wandelt in Unix-Time um
+        data.at[num, "unix"]=unix#wird in der Tabelle gespeichert
 
-
-    data["zurückgeben"]=""
-
-    for index in data.iterrows():
-        num=index[0]
-        id=data.iloc[num]["ID"]
-
-        data.at[num, "zurückgeben"]="""<form action="" method="get"><input type="hidden" name="site" value="return_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="zurückgeben"></form>""" % (id)
+        data.at[num, "zurückgeben"]="""<form action="" method="get"><input type="hidden" name="site" value="return_book"><input type="hidden" name="ID" value="%s"><input type="submit" value="zurückgeben"></form>""" % (id)#fügt Knopf zum zurückgeben hinzu
 
 
-    data=data.sort_values(by="unix")
-    data=data.rename(columns={"ausleih":"Abgabe-Datum"})
-    data=data.reset_index(drop=True)
+    data=data.sort_values(by="unix")#sortiert die Tabelle nach Abgabazeitpunkt
+    data=data.rename(columns={"ausleih":"Abgabe-Datum"})#umbenennen der Spalten
+    data=data.reset_index(drop=True)#setzt den Index neu
 
     
-    data.drop(columns=["unix", "ID"], inplace=True)
+    data.drop(columns=["unix", "ID"], inplace=True)#löschen unnötiger Spalten
         
-    return data
+    return data#gibt die Tabelle zurück
 
 
 def return_protokoll():
