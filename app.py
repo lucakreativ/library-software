@@ -73,7 +73,7 @@ def home():                                 #wird ausgeführt, wenn @pp.route ri
                 return render_template("select_user_manuel.html", ISBN=ISBN, text="Geben sie bitte den Namen Manuell ein") #Lädt die Seite zum Namen manuell eingeben
 
             elif user!=None:    #Nutzer wurde mitgegeben
-                names, bo = get_data.get_microsoft_names(ISBN, user)    #bekommt alle Namen an der Schule und übergibt, ob welche gefunden wurden
+                names, bo = get_data.get_microsoft_names(user)    #bekommt alle Namen an der Schule und übergibt, ob welche gefunden wurden
 
                 if bo==True:    #Wenn Namen gefunden wurden
                     return render_template("select_user.html", ISBN=ISBN, tables=[names.to_html(escape=False)], titles = ['na', 'Namen'])   #lädt HTML-Seite, übergibt Werte und wandelt Tabelle in HTML um

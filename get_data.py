@@ -70,19 +70,18 @@ def book_by_ISBN(ISBN):#bekommt Buchdaten für die Bearbeitung
     return data #übergibt Liste mit Informationen
 
 
-def keep_taking(id):
-    cursor.execute("UPDATE Ausleihen SET Verlängert=1 WHERE ID=%d" % (int(id)))
-    conn.commit()
+def keep_taking(id):#verlängert Buch bei Ausleih-ID
+    cursor.execute("UPDATE Ausleihen SET Verlängert=1 WHERE ID=%d" % (int(id)))#übergibt Daten zur Verlängerung
+    conn.commit()#speichert Daten
 
 
-def insert_book(ISBN, Titel, Autor):
-    cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))
-    conn.commit()
+def insert_book(ISBN, Titel, Autor):#fügt Buch hinzu
+    cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))#übergibt ISBN, Titel und Autor der Datenbank
+    conn.commit()#speichert Daten
 
 
-def get_microsoft_names(ISBN, surname):
+def get_microsoft_names(surname):
     names=get_name_microsoft.get_names_micro(surname)
-
 
 
     data=pd.DataFrame(names)
