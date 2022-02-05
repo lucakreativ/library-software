@@ -178,29 +178,27 @@ def book_by_user(Name, all):#zeigt alle/von Nutzer ausgeliehenen Bücher an
     return data#gibt die Tabelle zurück
 
 
-def return_protokoll():
-    cursor.execute("SELECT * FROM Protokoll")
-    data=cursor.fetchall()
+def return_protokoll():#zeigt das Protokoll an
+    cursor.execute("SELECT * FROM Protokoll")#bekommt alle Daten von MySQL
+    data=cursor.fetchall()#übergibt die Daten
 
-    data=pd.DataFrame(data, columns=["ID", "ProtokollID", "Art", "Text", "gebucht", "Datum"])
-    html_table=data.to_html()
+    data=pd.DataFrame(data, columns=["ID", "ProtokollID", "Art", "Text", "gebucht", "Datum"])#erzeugt mit Pandas Tabelle und übergibt Namen
+    html_table=data.to_html()#wandelt Tabelle in HTML um
 
-    return html_table
-
-
-def book_return(ID):
-    cursor.execute("DELETE FROM Ausleihen WHERE ID=%s" % (ID))
-    conn.commit()
+    return html_table#übergibt die Tabelle
 
 
-def taking_book(ISBN, Name, user):
-    id=protocol_write.write_in_protocol_table(2, Name, user, ISBN)
-    today=date.today()
-    cursor.execute("INSERT INTO Ausleihen (Schülername, ISBN, Datum, Verlängert, ProtokollID) VALUES (%s, %s, %s, %s, %s)", (Name, int(ISBN), today, 0, id))
-    conn.commit()
+def book_return(ID):#Buch wird zurückgegeben
+    cursor.execute("DELETE FROM Ausleihen WHERE ID=%s" % (ID))#löscht Ausleih-Eintrag bei Ausleih-ID
+    conn.commit()#Speichert änderungen
 
 
-    
+def taking_book(ISBN, Name, user):#leiht Buch aus
+    id=protocol_write.write_in_protocol_table(2, Name, user, ISBN)#schreibt in das Protokoll und bekommt Protokoll-ID
+    today=date.today()#bekommt heutigen Tag
+    cursor.execute("INSERT INTO Ausleihen (Schülername, ISBN, Datum, Verlängert, ProtokollID) VALUES (%s, %s, %s, %s, %s)", (Name, int(ISBN), today, 0, id))#Fügt Ausleih-Eintrag hinzu, mit Schülername, ISBN, heutiger Tag, Verlängert(std. = 0), Protokoll-ID
+    conn.commit()#speichert Änderungen
+
 
 def new_user(Benutzername, EMail, Passwort, Typ):
     hash=hash_password(Passwort)
