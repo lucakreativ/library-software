@@ -4,7 +4,7 @@ from read_config import read_db_config
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
-import hashlib
+from hash_pass import hash_password
 import pandas as pd
 import get_name_microsoft
 import time
@@ -200,26 +200,12 @@ def taking_book(ISBN, Name, user):#leiht Buch aus
     conn.commit()#speichert Änderungen
 
 
-def new_user(Benutzername, EMail, Passwort, Typ):
-    hash=hash_password(Passwort)
-    cursor.execute("""INSERT INTO Benutzer (Benutzername, EMail, Passwort, Typ) VALUES (%s, %s, %s, %s)""", (Benutzername, EMail, hash, Typ))
-    conn.commit()
-
-
-def hash_password(hash):
-    i=0
-    while i <314:
-        i+=1
-        hash=hashlib.sha512(str(hash).encode("utf-8")).hexdigest()
-    return hash
-
-
-def change_password(username, old_pass, new1_pass, new2_pass):
-    cursor.execute("""SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'""" % (username))
-    database_pass=cursor.fetchall()[0][0]
+def change_password(username, old_pass, new1_pass, new2_pass):#ändert das Passwort
+    cursor.execute("""SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'""" % (username))#bekommt altes gehashtes Passwort
+    database_pass=cursor.fetchall()[0][0]#übergibt gehashtes Passwort
     
-    old_hash=hash_password(old_pass)
-    if old_hash==database_pass:
+    old_hash=hash_password(old_pass)#hasht das eingegebene Passwort zur überprüfung
+    if old_hash==database_pass:#überprüft die gehashten Passwörter (eingegeben Passwort = Passwort in Datenbank)
         if new1_pass==new2_pass:
             new_pass_hash=hash_password(new1_pass)
             cursor.execute("""UPDATE Benutzer SET Passwort = '%s' WHERE Benutzername = '%s'""" % (new_pass_hash, username))
