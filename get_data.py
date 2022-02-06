@@ -200,37 +200,37 @@ def taking_book(ISBN, Name, user):#leiht Buch aus
     conn.commit()#speichert Änderungen
 
 
-def change_password(username, old_pass, new1_pass, new2_pass):#ändert das Passwort
+def change_password(username, old_pass, new1_pass, new2_pass):#ändert das Passwort (username=Einloggname, old_pass=altes Passwort zur virifizierung, new1_pass=neues Passwort, new2_pass=neues Passwort, damit man ich nicht vertippt)
     cursor.execute("""SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'""" % (username))#bekommt altes gehashtes Passwort
     database_pass=cursor.fetchall()[0][0]#übergibt gehashtes Passwort
     
     old_hash=hash_password(old_pass)#hasht das eingegebene Passwort zur überprüfung
     if old_hash==database_pass:#überprüft die gehashten Passwörter (eingegeben Passwort = Passwort in Datenbank)
-        if new1_pass==new2_pass:
-            new_pass_hash=hash_password(new1_pass)
-            cursor.execute("""UPDATE Benutzer SET Passwort = '%s' WHERE Benutzername = '%s'""" % (new_pass_hash, username))
-            conn.commit()
-            return 0 #success
+        if new1_pass==new2_pass:#überprüft die neuen Passwörter
+            new_pass_hash=hash_password(new1_pass)#hasht das neue Passwort
+            cursor.execute("""UPDATE Benutzer SET Passwort = '%s' WHERE Benutzername = '%s'""" % (new_pass_hash, username))#updatet das neue gehashte Passwort
+            conn.commit()#speichert änderungen
+            return 0#Alles Erfolgreich
         else:
-            return 2 #not same password
+            return 2#die neuen Passwörter sind nicht die gleichen
     else:
-        return 1 #incorrect password
+        return 1#falsches altes Passwort
 
 
-def login(username, password_i, ip):
-    try:
-        cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))
+def login(username, password_i, ip):#überprüft die Log-In Daten
+    try:#versucht auszuführen
+        cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))#versucht das gehashte Passwort zu von Benutzer zu bekommen
         
-        password=cursor.fetchall()
-        password=password[0][0]
-        hash=hash_password(password_i)
+        password=cursor.fetchall()#übergibt das gehashte Passwort
+        password=password[0][0]#bekommt das Passwort aus der Liste
+        hash=hash_password(password_i)#hasht das eingegebene Passwort
         
 
-        if str(password)==str(hash):
-            protocol_write.write_in_ip_table(username, ip)
+        if str(password)==str(hash):#vergleicht die gehashten Passwörter
+            protocol_write.write_in_ip_table(username, ip)#schreibt Anmeldedaten in Datenbank
 
-            return True
+            return True#Anmeldedaten sind richtig
         else:
-            return False
-    except:
-        return False
+            return False#Anmeldedaten sind falsch
+    except:#Benutzer nicht gefunden
+        return False#Anmeldedaten sind falsch
