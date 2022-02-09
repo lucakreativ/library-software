@@ -3,11 +3,17 @@ from read_config import read_db_config
 from datetime import date, datetime, time
 
 
-dbconfig = read_db_config()
-conn = MySQLConnection(**dbconfig)
-cursor = conn.cursor()
+def re_connect():                                   #setzt eine neue Verbindung, wegen MySQL timeout
+    dbconfig = read_db_config()                     #benutzt library Config-Reder für die Konfiguration
+    conn = MySQLConnection(**dbconfig)              #verbindung zur Datenbank wird hergestellt
+    cursor = conn.cursor()                          #setzt den Curser, der die Befehle ausführt
+
+    return cursor, conn                             #gibt den Cursor und die Verbindung zurück
+
 
 def write_in_ip_table(user, ip):
+    cursor, conn = re_connect()                     #bekommt MySQL Verbindungsdaten
+
     today=date.today()
     now = datetime.now()
     current_time=time(hour=now.hour, minute=now.minute, second=now.second)
@@ -17,6 +23,8 @@ def write_in_ip_table(user, ip):
     conn.commit()
 
 def write_in_protocol_table(type, name, user, param):
+    cursor, conn = re_connect()#bekommt MySQL Verbindungsdaten
+
     cursor.execute("""SELECT max(ProtokollID) FROM Protokoll""")
     id=cursor.fetchall()[0][0]
     if id==None:
