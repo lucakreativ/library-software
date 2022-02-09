@@ -1,7 +1,8 @@
-import sys
 from mysql.connector import MySQLConnection, Error
 from read_config import read_db_config
 from hash_pass import hash_password
+import sys
+
 
 dbconfig = read_db_config()
 conn = MySQLConnection(**dbconfig)
