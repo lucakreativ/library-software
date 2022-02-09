@@ -1,8 +1,8 @@
 import hashlib
 
-def hash_password(hash):
+def hash_password(password):
     i=0
-    while i <314:
+    while i <314:                                                           #rehasht den Sting 314x
         i+=1
-        hash=hashlib.sha512(str(hash).encode("utf-8")).hexdigest()
-    return hash
+        password=hashlib.sha512(str(password).encode("utf-8")).hexdigest()  #generiert mit sha512, den Hash
+    return hash#                                                            gibt den Hash zurück
