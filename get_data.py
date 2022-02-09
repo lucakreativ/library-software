@@ -19,16 +19,23 @@ inactive_time_s=inactive_time_m*60              #wird in Sekunden umgerechnet
 start_time=[0]                                  #speicher für Login-Zeit
 time_to_have=7*4                                #wie lange ein Buch ausgeliehen werden darf
     
-dbconfig = read_db_config()                     #benutzt library Config-Reder für die Konfiguration
-conn = MySQLConnection(**dbconfig)              #verbindung zur Datenbank wird hergestellt
-
-cursor = conn.cursor()                          #setzt den Curser, der die Befehle ausführt
+                          
 
 
+def try_connect():
+    try:
+        dbconfig = read_db_config()                     #benutzt library Config-Reder für die Konfiguration
+        conn = MySQLConnection(**dbconfig)              #verbindung zur Datenbank wird hergestellt
+        cursor = conn.cursor()                          #setzt den Curser, der die Befehle ausführt
 
+        return cursor, conn
+    except:
+        print("Verbindung besteht schon.")
 
 
 def print_all(table, table_name):                   #eine komplette Tabelle soll ausgegeben werden
+    cursor, conn = try_connect()
+    
     cursor.execute("SELECT * FROM "+table)          #führt den Befehl aus
     data=cursor.fetchall()                          #übergibt die Daten
 
@@ -39,6 +46,8 @@ def print_all(table, table_name):                   #eine komplette Tabelle soll
     return html_table                               #übergibt die HTML-Tabelle
 
 def print_books():                                                                                          #alle gespeicherten Bücher sollen angezeigt werden
+    cursor, conn = try_connect()
+    
     cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher")                                                 #bekommt ISBN, Titel, Autor von Tabelle Bücher
     data=cursor.fetchall()#übergibt die Daten
 
@@ -50,6 +59,8 @@ def print_books():                                                              
 
 
 def search_book(search_term):                                                                                                           #suche nach Buch
+    cursor, conn = try_connect()
+    
     cursor.execute("SELECT ISBN, Titel, Autor FROM Bücher WHERE Titel LIKE '%"+search_term+"%' OR ISBN LIKE '%"+search_term+"%'")       #sucht nach ISBN oder Titel  
 
 
@@ -63,22 +74,30 @@ def search_book(search_term):                                                   
 
 
 def update_book(ISBN, Titel, Autor, id):                                                                                      #Daten vom Buch aktualisieren
+    cursor, conn = try_connect()
+    
     cursor.execute("""UPDATE Bücher SET ISBN='%s', Titel='%s', Autor='%s' WHERE ID='%s'""" % (ISBN, Titel, Autor, id))        #übergibt Daten in der Datenbank
     conn.commit()                                                                                                             #speichert Daten in Datenbank
 
 
 def book_by_ISBN(ISBN):                                                                         #bekommt Buchdaten für die Bearbeitung
+    cursor, conn = try_connect()
+    
     cursor.execute("SELECT ISBN, Titel, Autor, ID FROM Bücher WHERE ISBN='%s'" % (ISBN))        #holt Daten aus Datenbank, per ISBN
     data=cursor.fetchall()[0]                                                                   #bekommt 1st Element
     return data                                                                                 #übergibt Liste mit Informationen
 
 
 def keep_taking(id):                                                                    #verlängert Buch bei Ausleih-ID
+    cursor, conn = try_connect()
+    
     cursor.execute("UPDATE Ausleihen SET Verlängert=1 WHERE ID=%d" % (int(id)))         #übergibt Daten zur Verlängerung
     conn.commit()                                                                       #speichert Daten
 
 
 def insert_book(ISBN, Titel, Autor):                                                                        #fügt Buch hinzu
+    cursor, conn = try_connect()
+
     cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))     #übergibt ISBN, Titel und Autor der Datenbank
     conn.commit()                                                                                           #speichert Daten
 
@@ -104,7 +123,8 @@ def get_microsoft_names(ISBN, surname):                     #bekommt alle Schül
 
 
 def book_by_user(Name, all):                                                                            #zeigt alle/von Nutzer ausgeliehenen Bücher an
-
+    
+    cursor, conn = try_connect()
 
     remove_row=[]                                                                                       #alle Einträge, die gelöscht werden sollen
 
@@ -182,6 +202,7 @@ def book_by_user(Name, all):                                                    
 
 
 def return_protokoll():                                                                             #zeigt das Protokoll an
+    cursor, conn = try_connect()
     cursor.execute("SELECT * FROM Protokoll")                                                       #bekommt alle Daten von MySQL
     data=cursor.fetchall()                                                                          #übergibt die Daten
 
@@ -192,11 +213,13 @@ def return_protokoll():                                                         
 
 
 def book_return(ID):                                                #Buch wird zurückgegeben
+    cursor, conn = try_connect()
     cursor.execute("DELETE FROM Ausleihen WHERE ID=%s" % (ID))      #löscht Ausleih-Eintrag bei Ausleih-ID
     conn.commit()                                                   #Speichert änderungen
 
 
 def taking_book(ISBN, Name, user):                                          #leiht Buch aus
+    cursor, conn = try_connect()
     id=protocol_write.write_in_protocol_table(2, Name, user, ISBN)          #schreibt in das Protokoll und bekommt Protokoll-ID
     today=date.today()                                                      #bekommt heutigen Tag
     cursor.execute("INSERT INTO Ausleihen (Schülername, ISBN, Datum, Verlängert, ProtokollID) VALUES (%s, %s, %s, %s, %s)", (Name, int(ISBN), today, 0, id))    #Fügt Ausleih-Eintrag hinzu, mit Schülername, ISBN, heutiger Tag, Verlängert(std. = 0), Protokoll-ID
@@ -204,6 +227,7 @@ def taking_book(ISBN, Name, user):                                          #lei
 
 
 def change_password(username, old_pass, new1_pass, new2_pass):                                      #ändert das Passwort (username=Einloggname, old_pass=altes Passwort zur virifizierung, new1_pass=neues Passwort, new2_pass=neues Passwort, damit man ich nicht vertippt)
+    cursor, conn = try_connect()
     cursor.execute("""SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'""" % (username))#     bekommt altes gehashtes Passwort
     database_pass=cursor.fetchall()[0][0]                                                           #übergibt gehashtes Passwort
     
@@ -221,6 +245,7 @@ def change_password(username, old_pass, new1_pass, new2_pass):                  
 
 
 def login(username, password_i, ip):                                                                #überprüft die Log-In Daten
+    cursor, conn = try_connect()
     try:#versucht auszuführen
         cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))      #versucht das gehashte Passwort zu von Benutzer zu bekommen
         
