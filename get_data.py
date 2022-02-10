@@ -23,7 +23,7 @@ time_to_have=7*4                                #wie lange ein Buch ausgeliehen 
 
 
 def re_connect():                                   #setzt eine neue Verbindung, wegen MySQL timeout
-    dbconfig = read_db_config()                     #benutzt library Config-Reder für die Konfiguration
+    dbconfig = read_db_config()                     #benutzt library Config-Reader für die Konfiguration
     conn = MySQLConnection(**dbconfig)              #verbindung zur Datenbank wird hergestellt
     cursor = conn.cursor()                          #setzt den Curser, der die Befehle ausführt
 
@@ -248,7 +248,7 @@ def login(username, password_i, ip):                                            
         
         password=cursor.fetchall()                                                                  #übergibt das gehashte Passwort
         password=password[0][0]                                                                     #bekommt das Passwort aus der Liste
-        hash_i=hash_password(password_i)                                                              #hasht das eingegebene Passwort  --> hash_pass.py
+        hash_i=hash_password(password_i)                                                            #hasht das eingegebene Passwort  --> hash_pass.py
         
         if str(password)==str(hash_i):                      #vergleicht die gehashten Passwörter
             protocol_write.write_in_ip_table(username, ip)  #schreibt Anmeldedaten in Datenbank  --> protocol_write.py
