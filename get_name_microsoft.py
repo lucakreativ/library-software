@@ -1,61 +1,49 @@
-from read_config import read_ms_config
-import json
+from read_config import read_ms_config  # --> read_config.py
 import logging
 import requests
 import msal
 
-config=read_ms_config()
-#print(config)
+config=read_ms_config()                                         #benutzt library Config-Reader für die Konfiguration
 
-def get_names_micro(surname):
+def get_names_micro(surname):                                   #bekommt Schüler-Namen bei Nachname
 
     names=[]
 
-    # Optional logging
-    # logging.basicConfig(level=logging.DEBUG)
-
-    #config = json.load(open("config.json"))
-    print(config)
-
-    # Create a preferably long-lived app instance which maintains a token cache.
+                                                                #Create a preferably long-lived app instance which maintains a token cache.
+                                                                #Erstellt eine App-Instanz, die den Token im Cache(RAM) behällt
     app = msal.ConfidentialClientApplication(
         config["client_id"], authority=config["authority"],
         client_credential=config["secret"],
-        # token_cache=...  # Default cache is in memory only.
-                        # You can learn how to use SerializableTokenCache from
-                        # https://msal-python.rtfd.io/en/latest/#msal.SerializableTokenCache
         )
 
-    # The pattern to acquire a token looks like this.
+                                                                #Verlaufsmuster zum bekommen des Tokens
     result = None
 
-    # Firstly, looks up a token from cache
-    # Since we are looking for token for the current app, NOT for an end user,
-    # notice we give account parameter as None.
-    url=[config["scope"]]
-    result = app.acquire_token_silent(url, account=None)
+                                                                #Als erstes wird im Cache nachgeschaut
 
-    if not result:
-        logging.info("No suitable token exists in cache. Let's get a new one from AAD.")
-        result = app.acquire_token_for_client(scopes=config["scope"])
+    url=[config["scope"]]                                                                                           #Endpunkt für API
+    result = app.acquire_token_silent(url, account=None)                                                            #schaut nach Token im Cache
 
-    endpoint="""https://graph.microsoft.com/v1.0/users?$search="surname:%s"&$orderby=displayName """ % (surname)
+    if not result:                                                                                                  #kein Token gefunden
+        logging.info("Token wurde nicht im Cache gefunden")
+        result = app.acquire_token_for_client(scopes=config["scope"])                                               #bekommt Token von Microsoft
 
-    if "access_token" in result:
-        # Calling graph using the access token
-        graph_data = requests.get(  # Use token to call downstream service
+    endpoint="""https://graph.microsoft.com/v1.0/users?$search="surname:%s"&$orderby=displayName """ % (surname)    #API-Abfrage für den Nachnamen
+
+    if "access_token" in result:                                                                                    #Token wurde gefunden/abgerufen
+                                                                                                                    #Ruft graph mit dem Access-Token
+        graph_data = requests.get(                                                                                  #benutzt den Token um die API aufzurufen
             endpoint,
             headers={'Authorization': 'Bearer ' + result['access_token'], "ConsistencyLevel":"eventual"},).json()
 
-        output = graph_data
     else:
         print(result.get("error"))
         print(result.get("error_description"))
-        print(result.get("correlation_id"))  # You may need this when reporting a bug
+        print(result.get("correlation_id"))             #Fehlermeldungen
         
 
-    spe=output["value"]
-    for user in spe:
-        names.append(user["displayName"])
+    spe=graph_data["value"]                             #bekommt die Daten von den Namen
+    for user in spe:                                    #iteriert durch die Daten
+        names.append(user["displayName"])               #fügt den Namen zur Liste hinzu
 
-    return names
+    return names                                        #gibt die Namen in Liste zurück
