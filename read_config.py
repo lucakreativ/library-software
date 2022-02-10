@@ -2,16 +2,16 @@ from configparser import ConfigParser
 
 
 def read_db_config(filename='config.ini', section='mysql'):
-    """ Read database configuration file and return a dictionary object
-    :param filename: name of the configuration file
-    :param section: section of database configuration
-    :return: a dictionary of database parameters
+    """ Liest die Konfigurationsdatei und gibt ein Dictionary Objekt zurück
+    filename = Dateiname der Konfigurationsdatei
+    section = Teil von der Konfigurationsdatei, der gelesen Werden soll
     """
-    # create parser and read ini configuration file
+
+    #erstellt den Parser und liest ini Konfigurationsdatei
     parser = ConfigParser()
     parser.read(filename)
 
-    # get section, default to mysql
+    #bekommt Sektion, liest mysql-Teil
     db = {}
     if parser.has_section(section):
         items = parser.items(section)
@@ -20,10 +20,16 @@ def read_db_config(filename='config.ini', section='mysql'):
     else:
         raise Exception('{0} not found in the {1} file'.format(section, filename))
 
-    return db
+    return db       #gibt Dictionary mit den Einträgen zurück
 
 
 def read_ms_config(filename="config.ini", section="ms-teams"):
+    """ Liest die Konfigurationsdatei und gibt ein Dictionary Objekt zurück
+    filename = Dateiname der Konfigurationsdatei
+    section = Teil von der Konfigurationsdatei, der gelesen Werden soll
+    """
+
+    #erstellt den Parser und liest ini Konfigurationsdatei
     parser = ConfigParser()
     parser.read(filename)
 
@@ -36,4 +42,4 @@ def read_ms_config(filename="config.ini", section="ms-teams"):
     else:
         raise Exception('{0} not found in the {1} file'.format(section, filename))
 
-    return ms
+    return ms       #gibt Dictionary mit den Einträgen zurück
