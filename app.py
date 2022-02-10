@@ -51,13 +51,13 @@ def home():                                     #wird ausgeführt, wenn @pp.rout
 
             if search==None:                            #keine Such request
                 data=get_data.print_books()             #bekommt alle Bücher
-                return render_template("book.html", search="",     #lädt die HTML-Seite und übergibt Werte zum anzeigen                 
+                return render_template("book.html", search="",                      #lädt die HTML-Seite und übergibt Werte zum anzeigen                 
                 tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])     #Tabelle wird in HTML umgewandelt und dann angezeigt
                 
             else:
-                data=get_data.search_book(search)       #bekommt Bücher mit Inhalt von "search"
-                return render_template("book.html", search=search,      #lädt die HTML-Seite und übergibt die Werte
-                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher']) #Tabelle wird in HTML umgewandelt und dann angezeigt
+                data=get_data.search_book(search)                                   #bekommt Bücher mit Inhalt von "search"
+                return render_template("book.html", search=search,                  #lädt die HTML-Seite und übergibt die Werte
+                tables=[data.to_html(escape=False)], titles = ['na', 'Bücher'])     #Tabelle wird in HTML umgewandelt und dann angezeigt
 
 
         elif site=="take_book":             #wenn Seite Buchausleihen aufgerufen wird
@@ -66,9 +66,9 @@ def home():                                     #wird ausgeführt, wenn @pp.rout
             para=request.args.get("para")   #bekommt Computer-Generierten Parameter
             username=session["user"]        #bekommt den angemeldeten Benutzer
 
-            if user!=None and para=="1":    #Buch soll ausgeliehen werden
-                get_data.taking_book(ISBN, user, username) #übergibt die Parameter --> get_data.py
-                return(redirect("/")) #wird zu Hauptseite weitergeleitet
+            if user!=None and para=="1":                        #Buch soll ausgeliehen werden
+                get_data.taking_book(ISBN, user, username)      #übergibt die Parameter --> get_data.py
+                return(redirect("/"))                           #wird zu Hauptseite weitergeleitet
 
             elif para=="0": #Name soll Manuelle gespeichert werden
                 return render_template("select_user_manuel.html", ISBN=ISBN, text="Geben sie bitte den Namen Manuell ein") #Lädt die Seite zum Namen manuell eingeben
