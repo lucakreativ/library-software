@@ -248,10 +248,9 @@ def login(username, password_i, ip):                                            
         
         password=cursor.fetchall()                                                                  #übergibt das gehashte Passwort
         password=password[0][0]                                                                     #bekommt das Passwort aus der Liste
-        hash=hash_password(password_i)                                                              #hasht das eingegebene Passwort  --> hash_pass.py
+        hash_i=hash_password(password_i)                                                              #hasht das eingegebene Passwort  --> hash_pass.py
         
-
-        if str(password)==str(hash):                        #vergleicht die gehashten Passwörter
+        if str(password)==str(hash_i):                      #vergleicht die gehashten Passwörter
             protocol_write.write_in_ip_table(username, ip)  #schreibt Anmeldedaten in Datenbank  --> protocol_write.py
 
             return True                                     #Anmeldedaten sind richtig
