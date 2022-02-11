@@ -5,12 +5,13 @@ import time
 import os
 
 import get_data # --> get_data.py
-from read_config import read_logging
 
 
-logs=read_logging()
-lev="logging."+logs["level"]
-logging.basicConfig(level=lev, filename='log.log')
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    filename="log.log")
 
 random_string=""
 

@@ -1,13 +1,16 @@
-from loguru import Level
 from mysql.connector import MySQLConnection, Error
-from read_config import read_db_config, read_logging      # --> read_config.py
+from read_config import read_db_config      # --> read_config.py
 from hash_pass import hash_password         # --> hash_pass.py
 import logging
 import sys
 
-logs=read_logging()
-lev="logging."+logs["level"]
-logging.basicConfig(level=lev, filename='log.log')
+
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    filename="log.log")
+
 
 dbconfig = read_db_config()                 #benutzt library Config-Reader für die Konfiguration
 conn = MySQLConnection(**dbconfig)          #verbindung zur Datenbank wird hergestellt

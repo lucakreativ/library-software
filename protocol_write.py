@@ -1,12 +1,14 @@
 from mysql.connector import MySQLConnection
 from datetime import date, datetime, time
-from read_config import read_db_config, read_logging              # --> read_config.py
+from read_config import read_db_config              # --> read_config.py
 import logging
 
 
-logs=read_logging()
-lev="logging."+logs["level"]
-logging.basicConfig(level=lev, filename='log.log')
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    filename="log.log")
 
 def re_connect():                                   #setzt eine neue Verbindung, wegen MySQL timeout
     dbconfig = read_db_config()                     #benutzt library Config-Reder für die Konfiguration
