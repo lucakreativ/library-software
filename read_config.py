@@ -43,3 +43,24 @@ def read_ms_config(filename="config.ini", section="ms-teams"):
         raise Exception('{0} not found in the {1} file'.format(section, filename))
 
     return ms       #gibt Dictionary mit den Einträgen zurück
+
+def read_logging(filename="config.ini", section="logging"):
+    """ Liest die Konfigurationsdatei und gibt ein Dictionary Objekt zurück
+    filename = Dateiname der Konfigurationsdatei
+    section = Teil von der Konfigurationsdatei, der gelesen Werden soll
+    """
+
+    #erstellt den Parser und liest ini Konfigurationsdatei
+    parser = ConfigParser()
+    parser.read(filename)
+
+    # get section, default to logging
+    log = {}
+    if parser.has_section(section):
+        items = parser.items(section)
+        for item in items:
+            log[item[0]] = item[1]
+    else:
+        raise Exception('{0} not found in the {1} file'.format(section, filename))
+
+    return log       #gibt Dictionary mit den Einträgen zurück

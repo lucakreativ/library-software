@@ -1,7 +1,12 @@
-from read_config import read_ms_config  # --> read_config.py
+from read_config import read_ms_config, read_logging  # --> read_config.py
 import logging
 import requests
 import msal
+
+
+logs=read_logging()
+lev="logging."+logs["level"]
+logging.basicConfig(level=lev, filename='log.log')
 
 config=read_ms_config()                                         #benutzt library Config-Reader für die Konfiguration
 

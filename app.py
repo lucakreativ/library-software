@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, redirect, session
+import logging
 import random
 import time
 import os
 
 import get_data # --> get_data.py
+from read_config import read_logging
 
+
+logs=read_logging()
+lev="logging."+logs["level"]
+logging.basicConfig(level=lev, filename='log.log')
 
 random_string=""
 

@@ -7,13 +7,14 @@ import logging
 import time
 
 
-from read_config import read_db_config      #--> read_config.py
+from read_config import read_db_config, read_logging      #--> read_config.py
 from hash_pass import hash_password         #--> hash_pass.py
 import get_name_microsoft                   #--> get_name_microsoft.py
 import protocol_write                       #--> protocol_write.py
 
-
-logging.basicConfig(level=logging.INFO, filename='log.log')
+logs=read_logging()
+lev="logging."+logs["level"]
+logging.basicConfig(level=lev, filename='log.log')
 
 
 inactive_time_m=10                              #setzt die maximale Inaktivitätszeit
