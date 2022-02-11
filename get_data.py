@@ -12,6 +12,7 @@ from hash_pass import hash_password         #--> hash_pass.py
 import get_name_microsoft                   #--> get_name_microsoft.py
 import protocol_write                       #--> protocol_write.py
 
+#generiert einen Logger, der alle wichtige Events loggt
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,

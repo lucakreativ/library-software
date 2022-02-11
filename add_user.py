@@ -5,6 +5,7 @@ import logging
 import sys
 
 
+#generiert einen Logger, der alle wichtige Events loggt
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,

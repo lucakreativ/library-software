@@ -7,6 +7,8 @@ import os
 import get_data # --> get_data.py
 
 
+
+#generiert einen Logger, der alle wichtige Events loggt
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,

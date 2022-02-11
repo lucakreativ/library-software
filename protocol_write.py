@@ -4,6 +4,7 @@ from read_config import read_db_config              # --> read_config.py
 import logging
 
 
+#generiert einen Logger, der alle wichtige Events loggt
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,
