@@ -3,6 +3,7 @@ from datetime import timedelta
 from datetime import datetime
 from datetime import date
 import pandas as pd
+import logging
 import time
 
 
@@ -12,6 +13,7 @@ import get_name_microsoft                   #--> get_name_microsoft.py
 import protocol_write                       #--> protocol_write.py
 
 
+logging.basicConfig(level=logging.INFO, filename='log.log')
 
 
 inactive_time_m=10                              #setzt die maximale Inaktivitätszeit
@@ -75,6 +77,7 @@ def update_book(ISBN, Titel, Autor, id):                                        
     
     cursor.execute("""UPDATE Bücher SET ISBN='%s', Titel='%s', Autor='%s' WHERE ID='%s'""" % (ISBN, Titel, Autor, id))        #übergibt Daten in der Datenbank
     conn.commit()                                                                                                             #speichert Daten in Datenbank
+    logging.info("Buch wurde angepasst: ISBN=%s, Titel=%s, Autor=%s" % (ISBN, Titel, Autor))
 
 
 def book_by_ISBN(ISBN):                                                                         #bekommt Buchdaten für die Bearbeitung
@@ -90,6 +93,7 @@ def keep_taking(id):                                                            
     
     cursor.execute("UPDATE Ausleihen SET Verlängert=1 WHERE ID=%d" % (int(id)))         #übergibt Daten zur Verlängerung
     conn.commit()                                                                       #speichert Daten
+    logging.info("Buch wurde verlängert: Auslei-ID=%s" % (id))
 
 
 def insert_book(ISBN, Titel, Autor):                                                                        #fügt Buch hinzu
@@ -97,6 +101,7 @@ def insert_book(ISBN, Titel, Autor):                                            
 
     cursor.execute("INSERT INTO Bücher (ISBN, Titel, Autor) VALUES (%s, %s, %s)", (ISBN, Titel, Autor))     #übergibt ISBN, Titel und Autor der Datenbank
     conn.commit()                                                                                           #speichert Daten
+    logging.info("Buch wurde hinzugefügt: ISBN=%s, Titel=%s, Autor=%s" % (ISBN, Titel, Autor))
 
 
 def get_microsoft_names(ISBN, surname):                     #bekommt alle Schüler bei Nachname
@@ -213,6 +218,7 @@ def book_return(ID):                                                #Buch wird z
     cursor, conn = re_connect()                                     #bekommt MySQL Verbindungsdaten
     cursor.execute("DELETE FROM Ausleihen WHERE ID=%s" % (ID))      #löscht Ausleih-Eintrag bei Ausleih-ID
     conn.commit()                                                   #Speichert änderungen
+    logging.info("Buch wurde zurückgegeben: Ausleih-ID=%s" % (ID))
 
 
 def taking_book(ISBN, Name, user):                                          #leiht Buch aus
@@ -221,6 +227,7 @@ def taking_book(ISBN, Name, user):                                          #lei
     today=date.today()                                                      #bekommt heutigen Tag
     cursor.execute("INSERT INTO Ausleihen (Schülername, ISBN, Datum, Verlängert, ProtokollID) VALUES (%s, %s, %s, %s, %s)", (Name, int(ISBN), today, 0, id))    #Fügt Ausleih-Eintrag hinzu, mit Schülername, ISBN, heutiger Tag, Verlängert(std. = 0), Protokoll-ID
     conn.commit()                                                           #speichert Änderungen
+    logging.info("Buch wurde ausgeliehen: ISBN=%s, Verleiher=%s, Ausleihender=%s" % (ISBN, user, Name))
 
 
 def change_password(username, old_pass, new1_pass, new2_pass):                                      #ändert das Passwort (username=Einloggname, old_pass=altes Passwort zur virifizierung, new1_pass=neues Passwort, new2_pass=neues Passwort, damit man ich nicht vertippt)
@@ -234,10 +241,13 @@ def change_password(username, old_pass, new1_pass, new2_pass):                  
             new_pass_hash=hash_password(new1_pass)                                                  #hasht das neue Passwort  --> hash_pass.py
             cursor.execute("""UPDATE Benutzer SET Passwort = '%s' WHERE Benutzername = '%s'""" % (new_pass_hash, username)) #updatet das neue gehashte Passwort
             conn.commit()                                                                           #speichert änderungen
+            logging.info("Passwort von %s wurde geändert" % (username))
             return 0                     #Alles Erfolgreich
         else:
+            logging.error("Passwort konnte nicht geändert werden: Beide neuen Passwörter sind nicht identisch, User=%s" % (username))
             return 2                    #die neuen Passwörter sind nicht die gleichen
     else:
+        logging.error("Passwort konnte nicht geändert werden: Falsches altes Passwort, User=%s" % (username))
         return 1                        #falsches altes Passwort
 
 
@@ -253,8 +263,11 @@ def login(username, password_i, ip):                                            
         if str(password)==str(hash_i):                      #vergleicht die gehashten Passwörter
             protocol_write.write_in_ip_table(username, ip)  #schreibt Anmeldedaten in Datenbank  --> protocol_write.py
 
+            logging.info("%s hat sich eingeloggt" % (username))
             return True                                     #Anmeldedaten sind richtig
         else:
+            logging.error("Login-Fehler von %s" % (username))
             return False                                    #Anmeldedaten sind falsch
     except:                                                 #Benutzer nicht gefunden
-        return False                                        #Anmeldedaten sind falsch
+        logging.error("Login-Fehler")
+        return False

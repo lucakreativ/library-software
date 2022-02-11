@@ -1,8 +1,11 @@
 from mysql.connector import MySQLConnection, Error
 from read_config import read_db_config      # --> read_config.py
 from hash_pass import hash_password         # --> hash_pass.py
+import logging
 import sys
 
+
+logging.basicConfig(level=logging.INFO, filename='log.log')
 
 dbconfig = read_db_config()                 #benutzt library Config-Reader für die Konfiguration
 conn = MySQLConnection(**dbconfig)          #verbindung zur Datenbank wird hergestellt
@@ -25,5 +28,4 @@ hash_i=hash_password(password)              #hasht das Passwort
 print("Hash: "+ hash_i)
 cursor.execute("""INSERT INTO Benutzer (Benutzername, EMail, Passwort, Typ) VALUES (%s, %s, %s, %s)""", (username, EMail, hash_i, type))#übergibt in Tabelle Nutzer den Benutzername, E-Mail, den Hash und den Typ des Kontos
 conn.commit()                               #speichert änderungen
-
-print("success")
+logging.info("Benutzer %s wurde hinzugefügt" % (username))
