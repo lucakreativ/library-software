@@ -6,7 +6,7 @@ import msal
 #generiert einen Logger, der alle wichtige Events loggt
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
+    level=logging.WARNING,
     datefmt='%Y-%m-%d %H:%M:%S',
     filename="log.log")
 
@@ -16,17 +16,18 @@ def get_names_micro(surname):                                   #bekommt Schüle
 
     names=[]
 
-                                                                #Create a preferably long-lived app instance which maintains a token cache.
-                                                                #Erstellt eine App-Instanz, die den Token im Cache(RAM) behällt
+
+    #Erstellt eine App-Instanz, die den Token im Cache(RAM) behällt
     app = msal.ConfidentialClientApplication(
         config["client_id"], authority=config["authority"],
         client_credential=config["secret"],
         )
 
-                                                                #Verlaufsmuster zum bekommen des Tokens
+    #Verlaufsmuster zum bekommen des Tokens
     result = None
 
-                                                                #Als erstes wird im Cache nachgeschaut
+    
+    #Als erstes wird im Cache nachgeschaut
 
     url=[config["scope"]]                                                                                           #Endpunkt für API
     result = app.acquire_token_silent(url, account=None)                                                            #schaut nach Token im Cache

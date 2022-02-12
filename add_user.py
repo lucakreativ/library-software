@@ -35,3 +35,4 @@ print("Hash: "+ hash_i)
 cursor.execute("""INSERT INTO Benutzer (Benutzername, EMail, Passwort, Typ) VALUES (%s, %s, %s, %s)""", (username, EMail, hash_i, type))#übergibt in Tabelle Nutzer den Benutzername, E-Mail, den Hash und den Typ des Kontos
 conn.commit()                               #speichert änderungen
 logging.info("Benutzer %s wurde hinzugefügt" % (username))
+print("success")
