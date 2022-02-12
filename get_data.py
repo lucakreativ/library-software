@@ -273,5 +273,5 @@ def login(username, password_i, ip):                                            
             logging.error("Login-Fehler von %s" % (username))
             return False                                    #Anmeldedaten sind falsch
     except:                                                 #Benutzer nicht gefunden
-        logging.error("Login-Fehler")
+        logging.error("Login-Fehler: Benutzer %s nicht gefunden" % (username))
         return False
