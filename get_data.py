@@ -118,7 +118,7 @@ def get_microsoft_names(ISBN, surname):                     #bekommt alle Schül
         num=index[0]                                        #bekommt Tabellen-Nummer bei Index
         name=data.iloc[num]["Namen"]                        #bekommt Namen von der Tabelle
 
-        data.at[num, "auswählen"]="""<form action="" method="get"><input type="hidden" name="site" value="take_book"><input type="hidden" name="para" value="1"><input type="hidden" name="ISBN" value="%s"><input type="hidden" name="user" value="%s"><input type="submit" value="auswäheln"></form>""" % (ISBN, name)#erstellt einen Knopf zum ausleihen auf den Schüler
+        data.at[num, "auswählen"]="""<form action="" method="get"><input type="hidden" name="site" value="take_book"><input type="hidden" name="para" value="1"><input type="hidden" name="ISBN" value="%s"><input type="hidden" name="user" value="%s"><input type="submit" value="auswählen"></form>""" % (ISBN, name)#erstellt einen Knopf zum ausleihen auf den Schüler
 
 
     if len(names)>0:                                        #Namen wurden gefunden
