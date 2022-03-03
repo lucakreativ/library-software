@@ -185,9 +185,9 @@ def book_by_user(Name, all):                                                    
             enddate=enddate+timedelta(days=time_to_have)                                                #addiert nochmal 4 Wochen
 
         if enddate<datetime.now():                                                                      #überprüft, ob das Buch überfällig ist
-            cell="""<div id='to_late'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))               #ist überfällig, wird rot markiert und Abgabezeitpunkt angezeigt
+            cell="""<div id='to_late'><p>%s</p></div>""" % (enddate.strftime("%d-%m-%Y"))               #ist überfällig, wird rot markiert und Abgabezeitpunkt angezeigt
         else:
-            cell="""<div id='in_time'><p>%s</p></div>""" % (enddate.strftime("%Y-%m-%d"))               #ist nicht überfällig, wird grün markiert und Abgabezeitpunkt angezeigt
+            cell="""<div id='in_time'><p>%s</p></div>""" % (enddate.strftime("%d-%m-%Y"))               #ist nicht überfällig, wird grün markiert und Abgabezeitpunkt angezeigt
 
         data.at[num, "ausleih"]=cell                                                                    #wird in Spalte "ausleih" angezeigt
 
