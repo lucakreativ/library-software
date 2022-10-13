@@ -134,11 +134,24 @@ def book_by_user(Name, all):                                                    
 
     remove_row=[]                                                                                       #alle Einträge, die gelöscht werden sollen
 
-    cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")#bekommt alle ausgeliehenen Bücher
-    data=cursor.fetchall()                                                                              #übergibt alle Daten
+    cursor.execute("SELECT ID, Schülername, Datum, ISBN, Verlängert, ProtokollID FROM Ausleihen")
+    data=cursor.fetchall()
+    #cursor.execute("SELECT Ausleihen.ID, Ausleihen.Schülername, Ausleihen.Datum, Bücher.Titel, Ausleihen.Verlängert, Ausleihen.ProtokollID FROM Ausleihen, Bücher WHERE Bücher.ISBN=Ausleihen.ISBN")#bekommt alle ausgeliehenen Bücher
+    #data=cursor.fetchall()                                                                              #übergibt alle Daten
 
 
     data=pd.DataFrame(data, columns=["ID", "Name", "ausleih", "Titel", "Verlängert", "Protokoll-ID"])   #ertsellt Tabelle mit Pandas und übergibt Spalten-Namen
+    
+    for index in data.iterrows():
+        num=index[0]
+        ISBN=data.iloc[num]["Titel"]
+
+        cursor.execute("SELECT Titel FROM Bücher WHERE ISBN = %s" % (ISBN))
+        dat=cursor.fetchall()
+        if len(dat)>0:
+            ISBN=dat[0][0]
+        data.at[num, "Titel"]=str(ISBN)
+        
     data.drop(data.columns[[5]], axis=1, inplace=True)                                                  #löscht unnötise Spalte
 
     data["unix"]=""                                                                                     #fügt Spalte mit ausleihzeit hinzu
