@@ -103,7 +103,7 @@ def home():                                     #wird ausgeführt, wenn @pp.rout
             titel=request.args.get("titel")                         #bekommt den Buch-Titel
 
             get_data.insert_book(ISBN, titel, autor)                #fügt das Buch zur Datenbank hinzu --> get_data.py
-            return redirect("/?site=book_by_ISBN&ISBN=%s" % (ISBN)) #weiterleitung zu Buch editier-seite
+            return redirect("/?site=insert_book")                   #weiterleitung zu Buch editier-seite
 
         elif site=="keep_book":                 #Seite Buch verlängern wurde aufgerufen
             id=request.args.get("ID")           #holt die Ausleih-ID
