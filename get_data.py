@@ -271,7 +271,7 @@ def change_password(username, old_pass, new1_pass, new2_pass):                  
 def login(username, password_i, ip):                                                                #überprüft die Log-In Daten
     cursor, conn = re_connect()                                                                     #bekommt MySQL Verbindungsdaten
     try:#versucht auszuführen
-        cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'" % (username))      #versucht das gehashte Passwort zu von Benutzer zu bekommen
+        cursor.execute("SELECT Passwort FROM Benutzer WHERE Benutzername = '%s'", (username,))      #versucht das gehashte Passwort zu von Benutzer zu bekommen
         
         password=cursor.fetchall()                                                                  #übergibt das gehashte Passwort
         password=password[0][0]                                                                     #bekommt das Passwort aus der Liste
